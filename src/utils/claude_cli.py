@@ -52,6 +52,9 @@ def call_claude(prompt: str, system_prompt: str | None = None, max_turns: int = 
 
     if result.returncode != 0:
         stderr = result.stderr.strip()
-        raise RuntimeError(f"Claude CLI failed (exit {result.returncode}): {stderr}")
+        stdout = result.stdout.strip()
+        # Claude CLI sometimes writes errors to stdout instead of stderr
+        error_detail = stderr or stdout or "(no output)"
+        raise RuntimeError(f"Claude CLI failed (exit {result.returncode}): {error_detail}")
 
     return result.stdout.strip()
