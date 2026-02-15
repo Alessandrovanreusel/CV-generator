@@ -1,7 +1,7 @@
 """Tests for the job analyzer module."""
 
 import json
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
 import pytest
 
@@ -9,21 +9,12 @@ from src.analyzer.job_analyzer import JobAnalyzer
 from src.analyzer.models import JobRequirements
 
 
-def _make_mock_response(text: str) -> MagicMock:
-    """Create a mock Anthropic API response with the given text content."""
-    mock_response = MagicMock()
-    mock_content_block = MagicMock()
-    mock_content_block.text = text
-    mock_response.content = [mock_content_block]
-    return mock_response
-
-
 class TestJobAnalyzerReturnsRequirements:
     """Test that the analyzer correctly parses a valid JSON response."""
 
-    def test_job_analyzer_returns_requirements(self, sample_job_text):
-        """Mock the Anthropic client, return valid JSON, and verify parsing."""
-        mock_client = MagicMock()
+    @patch("src.analyzer.job_analyzer.call_claude")
+    def test_job_analyzer_returns_requirements(self, mock_call, sample_job_text):
+        """Mock call_claude, return valid JSON, and verify parsing."""
         response_data = {
             "title": "Senior Software Engineer",
             "company": "TechCorp",
@@ -36,11 +27,9 @@ class TestJobAnalyzerReturnsRequirements:
             "keywords": ["CI/CD", "microservices"],
             "responsibilities": ["Design scalable APIs"],
         }
-        mock_client.messages.create.return_value = _make_mock_response(
-            json.dumps(response_data)
-        )
+        mock_call.return_value = json.dumps(response_data)
 
-        analyzer = JobAnalyzer(client=mock_client)
+        analyzer = JobAnalyzer()
         result = analyzer.analyze(sample_job_text)
 
         assert isinstance(result, JobRequirements)
@@ -52,15 +41,15 @@ class TestJobAnalyzerReturnsRequirements:
         assert result.experience_years == 5
         assert result.language == "en"
         assert "CI/CD" in result.keywords
-        mock_client.messages.create.assert_called_once()
+        mock_call.assert_called_once()
 
 
 class TestJobAnalyzerStripsMarkdownFences:
     """Test that markdown code fences are stripped before parsing."""
 
-    def test_job_analyzer_strips_markdown_fences(self, sample_job_text):
+    @patch("src.analyzer.job_analyzer.call_claude")
+    def test_job_analyzer_strips_markdown_fences(self, mock_call, sample_job_text):
         """Response wrapped in ```json``` fences should still parse correctly."""
-        mock_client = MagicMock()
         response_data = {
             "title": "Data Engineer",
             "company": "DataCorp",
@@ -73,10 +62,9 @@ class TestJobAnalyzerStripsMarkdownFences:
             "keywords": ["ETL"],
             "responsibilities": ["Build data pipelines"],
         }
-        fenced_json = f"```json\n{json.dumps(response_data)}\n```"
-        mock_client.messages.create.return_value = _make_mock_response(fenced_json)
+        mock_call.return_value = f"```json\n{json.dumps(response_data)}\n```"
 
-        analyzer = JobAnalyzer(client=mock_client)
+        analyzer = JobAnalyzer()
         result = analyzer.analyze(sample_job_text)
 
         assert isinstance(result, JobRequirements)
@@ -85,46 +73,27 @@ class TestJobAnalyzerStripsMarkdownFences:
         assert "Python" in result.required_skills
 
 
-class TestJobAnalyzerRetryOnFailure:
-    """Test the retry mechanism when API calls fail."""
+class TestJobAnalyzerShortText:
+    """Test that short text raises an error."""
 
-    @patch("src.analyzer.job_analyzer.time.sleep", return_value=None)
-    def test_job_analyzer_retry_on_failure(self, mock_sleep, sample_job_text):
-        """First call raises an error, second call succeeds -- verify retry works."""
-        import anthropic
+    def test_job_analyzer_rejects_short_text(self):
+        """Text shorter than 50 characters should be rejected."""
+        analyzer = JobAnalyzer()
+        with pytest.raises(ValueError, match="too short"):
+            analyzer.analyze("Short text")
 
-        mock_client = MagicMock()
-        response_data = {
-            "title": "Backend Engineer",
-            "company": "RetryCorp",
-            "location": "Remote",
-            "description": "Backend role.",
-            "required_skills": ["Python"],
-            "preferred_skills": [],
-            "experience_years": 2,
-            "language": "en",
-            "keywords": [],
-            "responsibilities": [],
-        }
-        success_response = _make_mock_response(json.dumps(response_data))
 
-        # First call raises RateLimitError, second call succeeds
-        mock_client.messages.create.side_effect = [
-            anthropic.RateLimitError(
-                message="Rate limited",
-                response=MagicMock(status_code=429, headers={}),
-                body=None,
-            ),
-            success_response,
-        ]
+class TestJobAnalyzerCliError:
+    """Test that CLI errors are propagated."""
 
-        analyzer = JobAnalyzer(client=mock_client)
-        result = analyzer.analyze(sample_job_text)
+    @patch("src.analyzer.job_analyzer.call_claude")
+    def test_job_analyzer_cli_error(self, mock_call, sample_job_text):
+        """RuntimeError from call_claude should propagate."""
+        mock_call.side_effect = RuntimeError("Claude CLI failed")
 
-        assert isinstance(result, JobRequirements)
-        assert result.title == "Backend Engineer"
-        assert mock_client.messages.create.call_count == 2
-        mock_sleep.assert_called_once()
+        analyzer = JobAnalyzer()
+        with pytest.raises(RuntimeError, match="Claude CLI failed"):
+            analyzer.analyze(sample_job_text)
 
 
 class TestJobRequirementsModel:

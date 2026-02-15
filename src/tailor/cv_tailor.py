@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import json
 
-import anthropic
-
 from src.analyzer.models import JobRequirements
 from src.analyzer.prompts import TAILOR_BULLETS_PROMPT, TAILOR_SUMMARY_PROMPT
 from src.tailor.models import (
@@ -17,6 +15,7 @@ from src.tailor.models import (
     TailoredVolunteering,
 )
 from src.tailor.strategies import ExperienceStrategy
+from src.utils.claude_cli import call_claude
 
 
 def _resolve_bilingual(field: dict | str, language: str) -> str:
@@ -44,15 +43,10 @@ def _resolve_coursework(field: dict | str | None, language: str) -> list[str]:
 
 
 class CvTailor:
-    """Tailor a master CV to match job requirements using Claude API + rules."""
+    """Tailor a master CV to match job requirements using Claude CLI + rules."""
 
-    def __init__(
-        self,
-        client: anthropic.Anthropic | None = None,
-        model: str = "claude-sonnet-4-20250514",
-    ):
-        self.client = client or anthropic.Anthropic()
-        self.model = model
+    def __init__(self, model: str | None = None, client=None):
+        # model and client kept for backward compatibility but not used
         self.strategy = ExperienceStrategy()
 
     def tailor(
@@ -67,7 +61,7 @@ class CvTailor:
             master_cv["experience"], requirements
         )
 
-        # Step 2: Rewrite summary via Claude
+        # Step 2: Rewrite summary via Claude CLI
         original_summary = _resolve_bilingual(
             master_cv["professional_summary"], language
         )
@@ -75,7 +69,7 @@ class CvTailor:
             original_summary, requirements, language
         )
 
-        # Step 3: Enhance bullet points via Claude
+        # Step 3: Enhance bullet points via Claude CLI
         tailored_experiences = []
         for exp in selected_exps:
             enhanced = self._enhance_experience(exp, requirements, language)
@@ -188,12 +182,7 @@ class CvTailor:
             language=lang_name,
         )
 
-        response = self.client.messages.create(
-            model=self.model,
-            max_tokens=500,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        return response.content[0].text.strip()
+        return call_claude(prompt)
 
     def _enhance_experience(
         self,
@@ -217,13 +206,8 @@ class CvTailor:
             language=lang_name,
         )
 
-        response = self.client.messages.create(
-            model=self.model,
-            max_tokens=1000,
-            messages=[{"role": "user", "content": prompt}],
-        )
+        raw = call_claude(prompt)
 
-        raw = response.content[0].text.strip()
         # Strip markdown fences if present
         if raw.startswith("```"):
             raw = raw.split("\n", 1)[1]

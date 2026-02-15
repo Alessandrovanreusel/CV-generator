@@ -1,7 +1,7 @@
 """Tests for the tailor engine (strategies, helpers, and CvTailor)."""
 
 import json
-from unittest.mock import MagicMock
+from unittest.mock import patch
 
 import pytest
 
@@ -154,13 +154,13 @@ class TestResolveBilingual:
 
     def test_resolve_bilingual_with_dict_en(self):
         """Resolve a bilingual dict to English."""
-        field = {"en": "Software Engineer", "fr": "Ingénieur Logiciel"}
+        field = {"en": "Software Engineer", "fr": "Ingenieur Logiciel"}
         assert _resolve_bilingual(field, "en") == "Software Engineer"
 
     def test_resolve_bilingual_with_dict_fr(self):
         """Resolve a bilingual dict to French."""
-        field = {"en": "Software Engineer", "fr": "Ingénieur Logiciel"}
-        assert _resolve_bilingual(field, "fr") == "Ingénieur Logiciel"
+        field = {"en": "Software Engineer", "fr": "Ingenieur Logiciel"}
+        assert _resolve_bilingual(field, "fr") == "Ingenieur Logiciel"
 
     def test_resolve_bilingual_with_string(self):
         """Pass-through when field is already a plain string."""
@@ -184,7 +184,7 @@ class TestResolveBilingualList:
         """Resolve a bilingual list dict to English."""
         field = {
             "en": ["Built APIs", "Deployed on AWS"],
-            "fr": ["Construit des API", "Déployé sur AWS"],
+            "fr": ["Construit des API", "Deploye sur AWS"],
         }
         result = _resolve_bilingual_list(field, "en")
         assert result == ["Built APIs", "Deployed on AWS"]
@@ -222,13 +222,13 @@ class TestResolveCoursework:
         """Bilingual dict should be resolved and split by comma."""
         field = {
             "en": "Data Structures, Algorithms, Cloud Computing",
-            "fr": "Structures de données, Algorithmes, Cloud Computing",
+            "fr": "Structures de donnees, Algorithmes, Cloud Computing",
         }
         result = _resolve_coursework(field, "en")
         assert result == ["Data Structures", "Algorithms", "Cloud Computing"]
 
         result_fr = _resolve_coursework(field, "fr")
-        assert result_fr == ["Structures de données", "Algorithmes", "Cloud Computing"]
+        assert result_fr == ["Structures de donnees", "Algorithmes", "Cloud Computing"]
 
     def test_resolve_coursework_plain_string(self):
         """A plain string should be split by comma."""
@@ -275,36 +275,19 @@ class TestReorderSkills:
 class TestCvTailorBuildsPersonalInfo:
     """Test that CvTailor builds PersonalInfo correctly from master_cv."""
 
+    @patch("src.tailor.cv_tailor.call_claude")
     def test_cv_tailor_builds_personal_info(
-        self, sample_master_cv, sample_job_requirements
+        self, mock_call, sample_master_cv, sample_job_requirements
     ):
-        """Mock Claude calls and verify PersonalInfo is built correctly."""
-        mock_client = MagicMock()
-
-        # Mock _rewrite_summary response
-        summary_response = MagicMock()
-        summary_block = MagicMock()
-        summary_block.text = "Tailored summary for the job."
-        summary_response.content = [summary_block]
-
-        # Mock _enhance_experience response (returns JSON array of bullets)
-        bullets_response = MagicMock()
-        bullets_block = MagicMock()
-        bullets_block.text = json.dumps([
-            "Enhanced bullet 1",
-            "Enhanced bullet 2",
-            "Enhanced bullet 3",
-        ])
-        bullets_response.content = [bullets_block]
-
-        # The first call is _rewrite_summary, subsequent calls are _enhance_experience
-        mock_client.messages.create.side_effect = [
-            summary_response,
-            bullets_response,
-            bullets_response,
+        """Mock call_claude and verify PersonalInfo is built correctly."""
+        # First call is _rewrite_summary, subsequent calls are _enhance_experience
+        mock_call.side_effect = [
+            "Tailored summary for the job.",
+            json.dumps(["Enhanced bullet 1", "Enhanced bullet 2", "Enhanced bullet 3"]),
+            json.dumps(["Enhanced bullet 1", "Enhanced bullet 2"]),
         ]
 
-        tailor = CvTailor(client=mock_client)
+        tailor = CvTailor()
         result = tailor.tailor(sample_master_cv, sample_job_requirements, language="en")
 
         personal = result.personal

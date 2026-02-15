@@ -63,4 +63,4 @@ class TestCliWithFile:
             ])
 
         assert result.exit_code == 0, f"CLI failed: {result.output}"
-        assert "CV generated successfully" in result.output
+        assert "CV generated" in result.output

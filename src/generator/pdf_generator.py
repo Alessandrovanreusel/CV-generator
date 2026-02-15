@@ -1,7 +1,16 @@
 from __future__ import annotations
 
 import base64
+import os
+import sys
 from pathlib import Path
+
+# Add MSYS2 mingw64 bin to DLL search path for WeasyPrint on Windows
+if sys.platform == "win32":
+    _msys2_bin = Path("C:/msys64/mingw64/bin")
+    if _msys2_bin.exists():
+        os.environ["PATH"] = str(_msys2_bin) + os.pathsep + os.environ.get("PATH", "")
+        os.add_dll_directory(str(_msys2_bin))
 
 from jinja2 import Environment, FileSystemLoader
 

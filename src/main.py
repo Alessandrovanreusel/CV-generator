@@ -1,4 +1,4 @@
-"""CV Generator CLI — Tailor your CV to match job ads automatically."""
+"""CV Generator CLI - Tailor your CV to match job ads automatically."""
 from __future__ import annotations
 
 import sys
@@ -44,8 +44,8 @@ def main(
 
     config = Config()
 
-    # ── Step 1: Scrape job ad ──
-    click.echo("📄 Scraping job ad...")
+    # -- Step 1: Scrape job ad --
+    click.echo("[1/6] Scraping job ad...")
     try:
         job_text = _scrape(job_url, job_file, search, location)
     except Exception as e:
@@ -56,37 +56,37 @@ def main(
         click.echo("Error: Could not extract enough text from the job ad.", err=True)
         sys.exit(1)
 
-    # ── Step 2: Detect language ──
+    # -- Step 2: Detect language --
     if language is None:
         from src.utils.language import detect_language
         language = detect_language(job_text)
-        click.echo(f"🌐 Detected language: {language}")
+        click.echo(f"[2/6] Detected language: {language}")
     else:
-        click.echo(f"🌐 Using language: {language}")
+        click.echo(f"[2/6] Using language: {language}")
 
-    # ── Step 3: Analyze job requirements ──
-    click.echo("🔍 Analyzing job requirements...")
+    # -- Step 3: Analyze job requirements --
+    click.echo("[3/6] Analyzing job requirements...")
     config.validate_settings()
     try:
         from src.analyzer.job_analyzer import JobAnalyzer
         analyzer = JobAnalyzer(model=config.claude_model)
         requirements = analyzer.analyze(job_text)
-        click.echo(f"   → {requirements.title} at {requirements.company}")
-        click.echo(f"   → {len(requirements.required_skills)} required skills, {len(requirements.keywords)} keywords")
+        click.echo(f"   -> {requirements.title} at {requirements.company}")
+        click.echo(f"   -> {len(requirements.required_skills)} required skills, {len(requirements.keywords)} keywords")
     except Exception as e:
         click.echo(f"Error analyzing job ad: {e}", err=True)
         sys.exit(1)
 
-    # ── Step 4: Load master CV ──
-    click.echo("📋 Loading master CV...")
+    # -- Step 4: Load master CV --
+    click.echo("[4/6] Loading master CV...")
     try:
         master_cv = load_json(config.master_cv_path)
     except FileNotFoundError:
         click.echo(f"Error: Master CV not found at {config.master_cv_path}", err=True)
         sys.exit(1)
 
-    # ── Step 5: Tailor CV ──
-    click.echo("✂️  Tailoring CV to match job requirements...")
+    # -- Step 5: Tailor CV --
+    click.echo("[5/6] Tailoring CV to match job requirements...")
     try:
         from src.tailor.cv_tailor import CvTailor
         tailor = CvTailor(model=config.claude_model)
@@ -95,13 +95,13 @@ def main(
         click.echo(f"Error tailoring CV: {e}", err=True)
         sys.exit(1)
 
-    # ── Step 6: Generate PDF ──
+    # -- Step 6: Generate PDF --
     if output is None:
         company_slug = requirements.company.replace(" ", "_")[:30] or "Unknown"
         today = date.today().strftime("%Y%m%d")
         output = str(config.output_dir / f"CV_Alessandro_van_Reusel_{company_slug}_{today}.pdf")
 
-    click.echo(f"📝 Generating PDF → {output}")
+    click.echo(f"[6/6] Generating PDF -> {output}")
     try:
         from src.generator.pdf_generator import PdfGenerator
         generator = PdfGenerator(include_photo=not no_photo)
@@ -110,7 +110,7 @@ def main(
             output,
             photo_path=config.photo_path,
         )
-        click.echo(f"✅ CV generated successfully: {result_path}")
+        click.echo(f"Done! CV generated: {result_path}")
     except Exception as e:
         click.echo(f"Error generating PDF: {e}", err=True)
         sys.exit(1)
@@ -144,13 +144,13 @@ def _scrape(
 
         for r in results:
             if r.get("description") and len(r["description"]) > 100:
-                click.echo(f"   → Using: {r['title']} at {r['company']}")
+                click.echo(f"   ->Using: {r['title']} at {r['company']}")
                 return r["description"]
 
         # If no descriptions, use URL scraper on the first result with a URL
         for r in results:
             if r.get("job_url") and r["job_url"] != "nan":
-                click.echo(f"   → Fetching full description from: {r['job_url']}")
+                click.echo(f"   ->Fetching full description from: {r['job_url']}")
                 from src.scraper.url_scraper import UrlScraper
                 return UrlScraper(r["job_url"]).scrape()
 

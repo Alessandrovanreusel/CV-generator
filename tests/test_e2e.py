@@ -1,12 +1,12 @@
 """End-to-end integration test for the CV-generator pipeline.
 
-Mocks the Claude API to avoid network calls.
+Mocks the Claude CLI to avoid network calls.
 Runs: scrape -> analyze -> tailor -> verify TailoredCV output.
 Skips PDF generation (WeasyPrint may not be installed).
 """
 
 import json
-from unittest.mock import MagicMock
+from unittest.mock import patch
 
 import pytest
 
@@ -17,20 +17,13 @@ from src.tailor.cv_tailor import CvTailor
 from src.tailor.models import TailoredCV
 
 
-def _make_mock_response(text: str) -> MagicMock:
-    """Create a mock Anthropic API response with the given text content."""
-    mock_response = MagicMock()
-    mock_content_block = MagicMock()
-    mock_content_block.text = text
-    mock_response.content = [mock_content_block]
-    return mock_response
-
-
 class TestFullPipelineWithFile:
     """End-to-end test: file scrape -> analyze -> tailor -> verify output."""
 
-    def test_full_pipeline_with_file(self, tmp_path, sample_master_cv):
-        """Run the full pipeline with a temp job ad file and mocked Claude API."""
+    @patch("src.tailor.cv_tailor.call_claude")
+    @patch("src.analyzer.job_analyzer.call_claude")
+    def test_full_pipeline_with_file(self, mock_analyzer_call, mock_tailor_call, tmp_path, sample_master_cv):
+        """Run the full pipeline with a temp job ad file and mocked Claude CLI."""
         # ------------------------------------------------------------------
         # Step 1: Create a temporary job ad file
         # ------------------------------------------------------------------
@@ -67,7 +60,7 @@ class TestFullPipelineWithFile:
         assert "Senior Software Engineer" in scraped_text
 
         # ------------------------------------------------------------------
-        # Step 3: Analyze the job ad (mock Claude)
+        # Step 3: Analyze the job ad (mock Claude CLI)
         # ------------------------------------------------------------------
         analyzer_requirements = {
             "title": "Senior Software Engineer",
@@ -86,12 +79,9 @@ class TestFullPipelineWithFile:
             ],
         }
 
-        mock_analyzer_client = MagicMock()
-        mock_analyzer_client.messages.create.return_value = _make_mock_response(
-            json.dumps(analyzer_requirements)
-        )
+        mock_analyzer_call.return_value = json.dumps(analyzer_requirements)
 
-        analyzer = JobAnalyzer(client=mock_analyzer_client)
+        analyzer = JobAnalyzer()
         requirements = analyzer.analyze(scraped_text)
 
         assert isinstance(requirements, JobRequirements)
@@ -100,34 +90,23 @@ class TestFullPipelineWithFile:
         assert "Python" in requirements.required_skills
 
         # ------------------------------------------------------------------
-        # Step 4: Tailor the CV (mock Claude for summary and bullets)
+        # Step 4: Tailor the CV (mock Claude CLI for summary and bullets)
         # ------------------------------------------------------------------
-        mock_tailor_client = MagicMock()
-
-        # Mock summary rewrite response
-        summary_response = _make_mock_response(
+        mock_tailor_call.side_effect = [
             "Seasoned software engineer with 5+ years of experience in Python, "
-            "AWS, and scalable microservices development."
-        )
-
-        # Mock bullet enhancement responses (one per selected experience)
-        bullets_response_1 = _make_mock_response(json.dumps([
-            "Developed high-performance REST APIs using Python and FastAPI",
-            "Architected and deployed AWS cloud infrastructure with Terraform",
-            "Built automated CI/CD pipelines with GitHub Actions",
-        ]))
-        bullets_response_2 = _make_mock_response(json.dumps([
-            "Built responsive React front-end components with TypeScript",
-            "Optimized PostgreSQL databases and complex query performance",
-        ]))
-
-        mock_tailor_client.messages.create.side_effect = [
-            summary_response,
-            bullets_response_1,
-            bullets_response_2,
+            "AWS, and scalable microservices development.",
+            json.dumps([
+                "Developed high-performance REST APIs using Python and FastAPI",
+                "Architected and deployed AWS cloud infrastructure with Terraform",
+                "Built automated CI/CD pipelines with GitHub Actions",
+            ]),
+            json.dumps([
+                "Built responsive React front-end components with TypeScript",
+                "Optimized PostgreSQL databases and complex query performance",
+            ]),
         ]
 
-        tailor = CvTailor(client=mock_tailor_client)
+        tailor = CvTailor()
         tailored_cv = tailor.tailor(
             sample_master_cv, requirements, language="en"
         )

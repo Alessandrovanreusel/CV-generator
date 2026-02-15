@@ -1,6 +1,7 @@
 @page {
     size: A4;
     margin: 0;
+    background: linear-gradient(to right, #1e3a5f 30%, #ffffff 30%);
 }
 
 * {
@@ -17,18 +18,18 @@ body {
 }
 
 .cv-container {
-    display: flex;
-    min-height: 100vh;
+    position: relative;
     width: 100%;
 }
 
 /* ========== SIDEBAR ========== */
 .sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 30%;
-    background-color: #1e3a5f;
     color: #ffffff;
     padding: 25px 18px;
-    min-height: 100vh;
 }
 
 .sidebar .photo-container {
@@ -155,9 +156,9 @@ body {
 
 /* ========== MAIN CONTENT ========== */
 .main-content {
+    margin-left: 30%;
     width: 70%;
     padding: 25px 22px;
-    background-color: #ffffff;
 }
 
 .main-content .name {
