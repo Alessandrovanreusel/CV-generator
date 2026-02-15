@@ -246,11 +246,18 @@ class TestResolveCoursework:
 
 
 class TestReorderSkills:
-    """Test _reorder_skills puts matching categories first."""
+    """Test _reorder_skills delegates to Claude and parses the result."""
 
-    def test_reorder_skills(self, sample_job_requirements):
-        """Categories with more matching skills should appear first,
-        and missing job skills are blended into existing categories."""
+    @patch("src.tailor.cv_tailor.call_claude")
+    def test_reorder_skills(self, mock_call, sample_job_requirements):
+        """Claude's curated skills dict is returned as-is."""
+        curated = {
+            "Cloud": ["AWS", "Docker", "Kubernetes", "Terraform"],
+            "Programming": ["Python", "TypeScript", "Java"],
+            "Frameworks": ["React", "Angular"],
+        }
+        mock_call.return_value = json.dumps(curated)
+
         skills = {
             "Frameworks": ["Angular", "Vue"],
             "Cloud": ["AWS", "Docker", "Terraform"],
@@ -258,19 +265,25 @@ class TestReorderSkills:
         }
 
         tailor = CvTailor.__new__(CvTailor)
-        reordered = tailor._reorder_skills(skills, sample_job_requirements)
+        result = tailor._reorder_skills(skills, sample_job_requirements)
 
-        categories = list(reordered.keys())
-        # No "Job-Relevant" category -- missing skills blend into existing ones
-        assert "Job-Relevant" not in categories
-        # Cloud has AWS, Docker, Terraform + injected cloud-related skills
-        assert categories[0] == "Cloud"
-        # Frameworks has fewest matching -- last
-        assert categories[-1] == "Frameworks"
-        # Missing skills are distributed into existing categories
-        all_skills = [s for sl in reordered.values() for s in sl]
-        assert "React" in all_skills
-        assert "Kubernetes" in all_skills
+        assert result == curated
+        mock_call.assert_called_once()
+
+    @patch("src.tailor.cv_tailor.call_claude")
+    def test_reorder_skills_fallback_on_bad_json(self, mock_call, sample_job_requirements):
+        """Falls back to original skills when Claude returns invalid JSON."""
+        mock_call.return_value = "not valid json"
+
+        skills = {
+            "Cloud": ["AWS", "Docker"],
+            "Programming": ["Python"],
+        }
+
+        tailor = CvTailor.__new__(CvTailor)
+        result = tailor._reorder_skills(skills, sample_job_requirements)
+
+        assert result == skills
 
 
 # ---------------------------------------------------------------------------
@@ -286,11 +299,16 @@ class TestCvTailorBuildsPersonalInfo:
         self, mock_call, sample_master_cv, sample_job_requirements
     ):
         """Mock call_claude and verify PersonalInfo is built correctly."""
-        # First call is _rewrite_summary, subsequent calls are _enhance_experience
+        # Calls: _rewrite_summary, _enhance_experience x2, _reorder_skills
         mock_call.side_effect = [
             "Tailored summary for the job.",
             json.dumps(["Enhanced bullet 1", "Enhanced bullet 2", "Enhanced bullet 3"]),
             json.dumps(["Enhanced bullet 1", "Enhanced bullet 2"]),
+            json.dumps({
+                "Programming": ["Python", "TypeScript", "Java"],
+                "Cloud": ["AWS", "Docker", "Terraform"],
+                "Frameworks": ["React", "FastAPI"],
+            }),
         ]
 
         tailor = CvTailor()

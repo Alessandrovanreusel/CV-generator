@@ -1,10 +1,13 @@
 from __future__ import annotations
 
 import json
-import re
 
 from src.analyzer.models import JobRequirements
-from src.analyzer.prompts import TAILOR_BULLETS_PROMPT, TAILOR_SUMMARY_PROMPT
+from src.analyzer.prompts import (
+    TAILOR_BULLETS_PROMPT,
+    TAILOR_SKILLS_PROMPT,
+    TAILOR_SUMMARY_PROMPT,
+)
 from src.tailor.models import (
     PersonalInfo,
     TailoredCertification,
@@ -233,169 +236,41 @@ class CvTailor:
             skills_used=exp.get("skills_used", []),
         )
 
-    # Skills with proficiency >= this threshold are always kept
-    STRONG_SKILL_THRESHOLD = 85
-    STRONG_SKILLS = {
-        "Python", "Java", "JavaScript", "React.js", "AWS", "CI/CD",
-        "Git", "Agile/Scrum", "Test Automation", "Docker",
-    }
-
-    # Domain hints expand category matching beyond literal word overlap.
-    # When a category name contains the key, these extra words are added
-    # to its matching pool so single-word tool names find the right home.
-    _DOMAIN_HINTS: dict[str, set[str]] = {
-        "cloud": {
-            "infrastructure", "container", "orchestration", "kubernetes",
-            "terraform", "serverless", "deploy", "helm", "ansible",
-            "cloudformation", "gcp", "azure", "aws", "lambda",
-        },
-        "devops": {
-            "ci", "cd", "pipeline", "jenkins", "monitoring", "prometheus",
-            "grafana", "datadog", "nagios", "deploy", "argocd", "sonarqube",
-        },
-        "backend": {
-            "api", "server", "microservice", "rest", "graphql", "grpc",
-            "fastapi", "django", "flask", "spring", "express", "node",
-        },
-        "frontend": {
-            "ui", "ux", "component", "browser", "dom", "spa",
-            "react", "angular", "vue", "svelte", "tailwind", "next",
-        },
-        "testing": {
-            "test", "qa", "selenium", "cypress", "jest", "pytest",
-            "automation", "junit", "playwright",
-        },
-        "data": {
-            "database", "sql", "nosql", "analytics", "etl", "warehouse",
-            "postgresql", "mysql", "mongodb", "redis", "cassandra",
-            "elasticsearch", "spark", "kafka",
-        },
-        "ai": {
-            "machine", "learning", "deep", "neural", "nlp", "model",
-            "training", "llm", "openai", "gpt", "bedrock", "langchain",
-        },
-        "programming": {
-            "language", "python", "java", "javascript", "typescript",
-            "kotlin", "rust", "go", "ruby", "php", "swift", "scala",
-        },
-    }
-
-    def _best_category(
-        self, skill: str, categories: dict[str, list[str]]
-    ) -> str | None:
-        """Find the best existing category for a skill by word overlap."""
-        skill_words = {
-            w.lower() for w in re.split(r"[\s/().,-]+", skill) if len(w) > 1
-        }
-
-        best_cat = None
-        best_score = 0
-
-        for cat_name, cat_skills in categories.items():
-            cat_words: set[str] = set()
-            for s in cat_skills:
-                cat_words.update(
-                    w.lower() for w in re.split(r"[\s/().,-]+", s) if len(w) > 1
-                )
-            # Include category name words
-            cat_name_lower = cat_name.lower()
-            cat_words.update(
-                w.lower() for w in re.split(r"[\s/&().,-]+", cat_name) if len(w) > 1
-            )
-            # Expand with domain hints based on category name
-            for domain_key, hints in self._DOMAIN_HINTS.items():
-                if domain_key in cat_name_lower:
-                    cat_words.update(hints)
-
-            overlap = len(skill_words & cat_words)
-            if overlap > best_score:
-                best_score = overlap
-                best_cat = cat_name
-
-        return best_cat
-
     def _reorder_skills(
         self, skills: dict, requirements: JobRequirements
     ) -> dict[str, list[str]]:
-        """Reorder skills and blend in missing job-required skills.
+        """Let Claude curate the skills section.
 
-        1. Find required/preferred skills from the job ad that are missing
-           from the master CV and insert them into the best-matching
-           existing category (by word overlap), so they blend naturally.
-        2. Sort skills within each category: job-relevant first, then
-           strong/core skills, then the rest.
-        3. Sort categories by relevance.
+        Claude sees both the candidate's real skills and the job
+        requirements, then produces a natural-looking skills section
+        that blends both without looking overly tailored.
         """
-        req_skills = (
-            requirements.required_skills + requirements.preferred_skills
+        prompt = TAILOR_SKILLS_PROMPT.format(
+            current_skills=json.dumps(skills, ensure_ascii=False),
+            job_title=requirements.title,
+            required_skills=", ".join(requirements.required_skills),
+            preferred_skills=", ".join(requirements.preferred_skills),
+            keywords=", ".join(requirements.keywords),
         )
-        req_skills_lower = {
-            s.lower()
-            for s in req_skills + requirements.keywords
-        }
 
-        # Collect all existing skills (lowercase) for lookup
-        existing_lower = set()
-        for skills_list in skills.values():
-            for s in skills_list:
-                existing_lower.add(s.lower())
+        raw = call_claude(prompt)
 
-        # Find job-required skills not already in the master CV
-        missing_skills = []
-        for s in req_skills:
-            if s.lower() not in existing_lower and s not in missing_skills:
-                missing_skills.append(s)
+        # Strip markdown fences if present
+        if raw.startswith("```"):
+            raw = raw.split("\n", 1)[1]
+            if raw.endswith("```"):
+                raw = raw.rsplit("```", 1)[0]
 
-        # Start from a copy of the original categories
-        reordered: dict[str, list[str]] = {
-            name: list(sl) for name, sl in skills.items()
-        }
+        try:
+            curated = json.loads(raw)
+        except json.JSONDecodeError:
+            return skills  # Fallback to original on parse error
 
-        # Blend missing skills into existing categories
-        if missing_skills:
-            matched = []
-            unmatched = []
-            for skill in missing_skills:
-                target = self._best_category(skill, reordered)
-                if target:
-                    reordered[target].append(skill)
-                    matched.append(skill)
-                else:
-                    unmatched.append(skill)
+        # Validate structure: must be dict[str, list[str]]
+        if not isinstance(curated, dict):
+            return skills
+        for v in curated.values():
+            if not isinstance(v, list):
+                return skills
 
-            # Distribute unmatched skills round-robin across the top
-            # relevant categories so they don't pile into one.
-            if unmatched:
-                cat_relevance = {
-                    name: sum(
-                        1 for s in sl if s.lower() in req_skills_lower
-                    )
-                    for name, sl in reordered.items()
-                }
-                top_cats = sorted(
-                    cat_relevance, key=cat_relevance.get, reverse=True  # type: ignore[arg-type]
-                )[:3]
-                for i, skill in enumerate(unmatched):
-                    reordered[top_cats[i % len(top_cats)]].append(skill)
-
-        def skill_sort_key(skill: str) -> tuple[int, int]:
-            is_relevant = skill.lower() in req_skills_lower
-            is_strong = skill in self.STRONG_SKILLS
-            priority = 0 if is_relevant else (1 if is_strong else 2)
-            return (priority, 0)
-
-        for name in reordered:
-            reordered[name] = sorted(reordered[name], key=skill_sort_key)
-
-        def category_relevance(category_skills: list[str]) -> int:
-            return sum(
-                1 for s in category_skills if s.lower() in req_skills_lower
-            )
-
-        scored = [
-            (category_relevance(skills_list), name, skills_list)
-            for name, skills_list in reordered.items()
-        ]
-        scored.sort(key=lambda x: x[0], reverse=True)
-
-        return {name: skills_list for _, name, skills_list in scored}
+        return curated

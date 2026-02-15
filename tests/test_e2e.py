@@ -104,6 +104,12 @@ class TestFullPipelineWithFile:
                 "Built responsive React front-end components with TypeScript",
                 "Optimized PostgreSQL databases and complex query performance",
             ]),
+            # Skills curation call
+            json.dumps({
+                "Programming": ["Python", "TypeScript", "Java"],
+                "Cloud": ["AWS", "Docker", "Kubernetes", "Terraform"],
+                "Frameworks": ["React", "FastAPI", "Django"],
+            }),
         ]
 
         tailor = CvTailor()

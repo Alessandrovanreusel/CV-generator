@@ -73,6 +73,11 @@ class TestFullPipelineEnglish:
             "Experienced engineer specializing in Python and AWS.",
             json.dumps(["Enhanced bullet 1", "Enhanced bullet 2", "Enhanced bullet 3"]),
             json.dumps(["Enhanced bullet 1", "Enhanced bullet 2"]),
+            json.dumps({
+                "Programming": ["Python", "TypeScript", "Java"],
+                "Cloud": ["AWS", "Docker", "Terraform"],
+                "Frameworks": ["React", "FastAPI"],
+            }),
         ]
 
         tailored = CvTailor().tailor(sample_master_cv, requirements, language="en")
@@ -134,6 +139,11 @@ class TestFullPipelineFrench:
             "Ingenieur experimente specialise en Python et AWS.",
             json.dumps(["Bullet ameliore 1", "Bullet ameliore 2", "Bullet ameliore 3"]),
             json.dumps(["Bullet ameliore 1", "Bullet ameliore 2"]),
+            json.dumps({
+                "Programming": ["Python", "TypeScript", "Java"],
+                "Cloud": ["AWS", "Docker", "Terraform"],
+                "Frameworks": ["React", "FastAPI"],
+            }),
         ]
 
         tailored = CvTailor().tailor(sample_master_cv, requirements, language="fr")

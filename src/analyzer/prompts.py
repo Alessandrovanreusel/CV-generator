@@ -64,3 +64,28 @@ Rules:
 - NEVER use special Unicode characters like em-dashes, en-dashes, arrows, or special quotes. Use only plain ASCII: hyphen (-), single quote ('), double quote (")
 
 Return ONLY a JSON array of strings (the enhanced bullet points), nothing else."""
+
+TAILOR_SKILLS_PROMPT = """You are a professional CV writer curating the skills section for a resume.
+
+Candidate's current skills (grouped by category):
+{current_skills}
+
+Target job requirements:
+- Title: {job_title}
+- Required skills: {required_skills}
+- Preferred skills: {preferred_skills}
+- Keywords: {keywords}
+
+Your task: produce a curated skills section that looks like a natural, believable resume - NOT like a resume that was reverse-engineered from the job ad.
+
+Rules:
+- Keep the SAME category names from the candidate's current skills
+- You CAN add skills from the job requirements that the candidate does not have yet, but spread them naturally across the existing categories - do NOT create new categories
+- You CAN remove skills that are irrelevant to this role to make room
+- Each category should have 3-7 skills
+- Put the most relevant skills first within each category, but mix in non-job-related skills so it looks organic
+- The result should look like a real engineer's skill set that happens to be a good fit, not a copy-paste of the job ad
+- Keep the candidate's strongest/core skills even if they are not in the job ad
+- Total across all categories: aim for 25-35 skills
+
+Return ONLY a JSON object where keys are category names and values are arrays of skill strings. No markdown, no explanation."""
