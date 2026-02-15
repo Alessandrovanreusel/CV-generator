@@ -250,7 +250,7 @@ class TestReorderSkills:
 
     def test_reorder_skills(self, sample_job_requirements):
         """Categories with more matching skills should appear first,
-        and missing job-required skills are injected."""
+        and missing job skills are blended into existing categories."""
         skills = {
             "Frameworks": ["Angular", "Vue"],
             "Cloud": ["AWS", "Docker", "Terraform"],
@@ -261,16 +261,16 @@ class TestReorderSkills:
         reordered = tailor._reorder_skills(skills, sample_job_requirements)
 
         categories = list(reordered.keys())
-        # Job-Relevant is injected first with missing required/preferred skills
-        assert categories[0] == "Job-Relevant"
-        # Cloud has AWS, Docker, Terraform -- all in required/preferred/keywords
-        assert categories[1] == "Cloud"
-        # Frameworks has none matching -- last among original categories
+        # No "Job-Relevant" category -- missing skills blend into existing ones
+        assert "Job-Relevant" not in categories
+        # Cloud has AWS, Docker, Terraform + injected cloud-related skills
+        assert categories[0] == "Cloud"
+        # Frameworks has fewest matching -- last
         assert categories[-1] == "Frameworks"
-        # Missing skills like React, TypeScript, etc. should be in Job-Relevant
-        job_relevant = reordered["Job-Relevant"]
-        assert "React" in job_relevant
-        assert "Kubernetes" in job_relevant
+        # Missing skills are distributed into existing categories
+        all_skills = [s for sl in reordered.values() for s in sl]
+        assert "React" in all_skills
+        assert "Kubernetes" in all_skills
 
 
 # ---------------------------------------------------------------------------
