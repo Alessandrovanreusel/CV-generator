@@ -107,6 +107,9 @@
                 <span class="exp-date">{{ exp.start_date }} – {{ exp.end_date or labels.present }}</span>
             </div>
             <div class="exp-title-location">{{ exp.title }} · {{ exp.location }}</div>
+            {% if exp.summary %}
+            <div class="exp-summary">{{ exp.summary }}</div>
+            {% endif %}
             <ul class="exp-bullets">
                 {% for bullet in exp.bullets %}
                 <li>{{ bullet }}</li>
