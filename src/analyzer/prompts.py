@@ -48,6 +48,9 @@ TAILOR_BULLETS_PROMPT = """You are a professional CV writer. Enhance these exper
 Current bullet points:
 {bullets}
 
+Technologies used at this job:
+{technologies}
+
 Target job requirements:
 - Required skills: {required_skills}
 - Keywords: {keywords}
@@ -55,8 +58,8 @@ Target job requirements:
 
 Rules:
 - Keep the same number of bullet points (return exactly {num_bullets} bullets)
-- Emphasize aspects that align with the job requirements
-- Incorporate relevant keywords naturally where truthful
+- The most important required skills from the job ad MUST be mentioned naturally across the bullets (e.g. if the job requires Python and AWS, make sure they appear)
+- You CAN swap or replace the technologies in the bullets with technologies from the job ad to create a better match (e.g. replace "Angular" with "React" if the job requires React)
 - You CAN invent or enhance accomplishments and metrics if it creates a better match with the job requirements
 - You CAN rephrase and restructure to highlight relevant aspects
 - Keep each bullet concise (1-2 lines)

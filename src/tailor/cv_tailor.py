@@ -200,9 +200,12 @@ class CvTailor:
         # Limit to 4 best bullets for brevity
         bullets = bullets[:4]
 
+        technologies = exp.get("skills_used", [])
+
         lang_name = "French" if language == "fr" else "English"
         prompt = TAILOR_BULLETS_PROMPT.format(
             bullets=json.dumps(bullets, ensure_ascii=False),
+            technologies=", ".join(technologies) if technologies else "N/A",
             required_skills=", ".join(requirements.required_skills),
             keywords=", ".join(requirements.keywords),
             responsibilities="; ".join(requirements.responsibilities[:5]),
