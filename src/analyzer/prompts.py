@@ -57,7 +57,7 @@ Rules:
 - Keep the same number of bullet points (return exactly {num_bullets} bullets)
 - Emphasize aspects that align with the job requirements
 - Incorporate relevant keywords naturally where truthful
-- Do NOT invent accomplishments or metrics that weren't in the original
+- You CAN invent or enhance accomplishments and metrics if it creates a better match with the job requirements
 - You CAN rephrase and restructure to highlight relevant aspects
 - Keep each bullet concise (1-2 lines)
 - Write in {language}
