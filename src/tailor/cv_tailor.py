@@ -242,27 +242,45 @@ class CvTailor:
     def _reorder_skills(
         self, skills: dict, requirements: JobRequirements
     ) -> dict[str, list[str]]:
-        """Reorder skill categories and skills within them to match job requirements.
+        """Reorder skills and inject missing job-required skills.
 
-        Skills within each category are sorted: job-relevant first, then
-        strong/core skills, then the rest. Categories are sorted by how
-        many relevant skills they contain.
+        1. Add required/preferred skills from the job ad that are missing
+           from the master CV (placed in a 'Job-Relevant' category at the top).
+        2. Sort skills within each category: job-relevant first, then
+           strong/core skills, then the rest.
+        3. Sort categories by relevance.
         """
+        req_skills = (
+            requirements.required_skills + requirements.preferred_skills
+        )
         req_skills_lower = {
             s.lower()
-            for s in requirements.required_skills
-            + requirements.preferred_skills
-            + requirements.keywords
+            for s in req_skills + requirements.keywords
         }
+
+        # Collect all existing skills (lowercase) for lookup
+        existing_lower = set()
+        for skills_list in skills.values():
+            for s in skills_list:
+                existing_lower.add(s.lower())
+
+        # Find job-required skills not already in the master CV
+        missing_skills = []
+        for s in req_skills:
+            if s.lower() not in existing_lower and s not in missing_skills:
+                missing_skills.append(s)
+
+        # Build the reordered dict, injecting missing skills first
+        reordered = {}
+        if missing_skills:
+            reordered["Job-Relevant"] = missing_skills
 
         def skill_sort_key(skill: str) -> tuple[int, int]:
             is_relevant = skill.lower() in req_skills_lower
             is_strong = skill in self.STRONG_SKILLS
-            # Lower = higher priority: relevant first (0), then strong (1), then rest (2)
             priority = 0 if is_relevant else (1 if is_strong else 2)
             return (priority, 0)
 
-        reordered = {}
         for name, skills_list in skills.items():
             sorted_skills = sorted(skills_list, key=skill_sort_key)
             reordered[name] = sorted_skills

@@ -21,7 +21,6 @@ class JobAnalyzer:
 
         prompt = USER_PROMPT_TEMPLATE.format(job_text=job_text)
         raw_json = call_claude(prompt, system_prompt=SYSTEM_PROMPT)
-
         # Strip markdown fences if present
         if raw_json.startswith("```"):
             raw_json = raw_json.split("\n", 1)[1]
