@@ -35,9 +35,12 @@ def call_claude(prompt: str, system_prompt: str | None = None, max_turns: int = 
     if max_turns:
         cmd.extend(["--max-turns", str(max_turns)])
 
-    # Clear CLAUDECODE env var to avoid nested-session detection
+    # Clear Claude Code env vars (nested-session detection) and any
+    # ANTHROPIC_API_KEY so claude -p uses the subscription auth instead
     env = os.environ.copy()
-    env.pop("CLAUDECODE", None)
+    for key in list(env):
+        if key.startswith("CLAUDE") or key.startswith("ANTHROPIC_"):
+            env.pop(key)
 
     result = subprocess.run(
         cmd,
