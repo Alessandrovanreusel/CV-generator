@@ -232,16 +232,40 @@ class CvTailor:
             skills_used=exp.get("skills_used", []),
         )
 
+    # Skills with proficiency >= this threshold are always kept
+    STRONG_SKILL_THRESHOLD = 85
+    STRONG_SKILLS = {
+        "Python", "Java", "JavaScript", "React.js", "AWS", "CI/CD",
+        "Git", "Agile/Scrum", "Test Automation", "Docker",
+    }
+
     def _reorder_skills(
         self, skills: dict, requirements: JobRequirements
     ) -> dict[str, list[str]]:
-        """Reorder skill categories to prioritize those matching job requirements."""
+        """Reorder skill categories and skills within them to match job requirements.
+
+        Skills within each category are sorted: job-relevant first, then
+        strong/core skills, then the rest. Categories are sorted by how
+        many relevant skills they contain.
+        """
         req_skills_lower = {
             s.lower()
             for s in requirements.required_skills
             + requirements.preferred_skills
             + requirements.keywords
         }
+
+        def skill_sort_key(skill: str) -> tuple[int, int]:
+            is_relevant = skill.lower() in req_skills_lower
+            is_strong = skill in self.STRONG_SKILLS
+            # Lower = higher priority: relevant first (0), then strong (1), then rest (2)
+            priority = 0 if is_relevant else (1 if is_strong else 2)
+            return (priority, 0)
+
+        reordered = {}
+        for name, skills_list in skills.items():
+            sorted_skills = sorted(skills_list, key=skill_sort_key)
+            reordered[name] = sorted_skills
 
         def category_relevance(category_skills: list[str]) -> int:
             return sum(
@@ -250,7 +274,7 @@ class CvTailor:
 
         scored = [
             (category_relevance(skills_list), name, skills_list)
-            for name, skills_list in skills.items()
+            for name, skills_list in reordered.items()
         ]
         scored.sort(key=lambda x: x[0], reverse=True)
 
