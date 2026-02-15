@@ -36,7 +36,7 @@ Rules:
 - Keep it 2-3 sentences maximum
 - Highlight relevant experience and skills that match the job
 - Use keywords from the job requirements naturally
-- Do NOT invent experience or skills the person doesn't have
+- You CAN invent skills and experience within existing jobs for a better match, but NEVER invent a whole new job or company
 - Write in {language}
 - Be specific and impactful, not generic
 - NEVER use special Unicode characters like em-dashes, en-dashes, arrows, or special quotes. Use only plain ASCII: hyphen (-), single quote ('), double quote (")
