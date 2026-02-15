@@ -60,4 +60,23 @@ def call_claude(prompt: str, system_prompt: str | None = None, max_turns: int = 
         error_detail = stderr or stdout or "(no output)"
         raise RuntimeError(f"Claude CLI failed (exit {result.returncode}): {error_detail}")
 
-    return result.stdout.strip()
+    return _sanitize(result.stdout.strip())
+
+
+def _sanitize(text: str) -> str:
+    """Replace special Unicode characters with ASCII equivalents."""
+    replacements = {
+        "\u2014": " -",   # em-dash
+        "\u2013": "-",    # en-dash
+        "\u2192": "->",   # arrow
+        "\u2248": "~",    # approx
+        "\u2018": "'",    # left single quote
+        "\u2019": "'",    # right single quote
+        "\u201c": '"',    # left double quote
+        "\u201d": '"',    # right double quote
+        "\u2026": "...",  # ellipsis
+        "\u00d7": "x",    # multiplication sign
+    }
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+    return text

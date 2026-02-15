@@ -39,6 +39,7 @@ Rules:
 - Do NOT invent experience or skills the person doesn't have
 - Write in {language}
 - Be specific and impactful, not generic
+- NEVER use special Unicode characters like em-dashes, en-dashes, arrows, or special quotes. Use only plain ASCII: hyphen (-), single quote ('), double quote (")
 
 Return ONLY the rewritten summary text, nothing else."""
 
@@ -60,5 +61,6 @@ Rules:
 - You CAN rephrase and restructure to highlight relevant aspects
 - Keep each bullet concise (1-2 lines)
 - Write in {language}
+- NEVER use special Unicode characters like em-dashes, en-dashes, arrows, or special quotes. Use only plain ASCII: hyphen (-), single quote ('), double quote (")
 
 Return ONLY a JSON array of strings (the enhanced bullet points), nothing else."""
