@@ -2,8 +2,8 @@
   "personal_info": {
     "name": "Alessandro van Reusel",
     "title": {
-      "en": "Software & Test Engineer Consultant  - Full-Stack, Cloud & AI",
-      "fr": "Consultant Ingénieur Logiciel & Test  - Full-Stack, Cloud & IA"
+      "en": "Software & Test Engineer Consultant | Full-Stack, Cloud & AI",
+      "fr": "Consultant Ingenieur Logiciel & Test | Full-Stack, Cloud & IA"
     },
     "location": "Amsterdam, Netherlands",
     "phone": "+33 7 83 93 44 01",
@@ -29,8 +29,8 @@
       "end_date": null,
       "is_current": true,
       "summary": {
-        "en": "Consultant delivering software and IT solutions across domains -translating business needs into reliable, scalable implementations and collaborating tightly with cross-functional teams to ship on time and within budget.",
-        "fr": "Consultant livrant des solutions logicielles et IT dans divers domaines  - traduisant les besoins métier en implémentations fiables et évolutives, collaborant étroitement avec des équipes transversales pour livrer dans les délais et le budget."
+        "en": "Consultant delivering software and IT solutions across domains, translating business needs into reliable, scalable implementations and collaborating tightly with cross-functional teams to ship on time and within budget.",
+        "fr": "Consultant livrant des solutions logicielles et IT dans divers domaines, traduisant les besoins metier en implementations fiables et evolutives, collaborant etroitement avec des equipes transversales pour livrer dans les delais et le budget."
       },
       "bullets": {
         "en": [
@@ -61,12 +61,12 @@
       "end_date": "2025-11",
       "is_current": false,
       "summary": {
-        "en": "On-road validation for TomTom's Automotive Navigation & EV Routing -owning daily test readiness, executing multi-country road scenarios, and translating evidenced findings into product hardening before release.",
-        "fr": "Validation sur route pour la Navigation Automobile et le Routage VE de TomTom  - responsable de la préparation quotidienne des tests, exécution de scénarios routiers multi-pays, et traduction des résultats en amélioration produit avant la mise en production."
+        "en": "On-road validation for TomTom's Automotive Navigation & EV Routing. Owned daily test readiness, executed multi-country road scenarios, and translated evidenced findings into product hardening before release.",
+        "fr": "Validation sur route pour la Navigation Automobile et le Routage VE de TomTom. Responsable de la preparation quotidienne des tests, execution de scenarios routiers multi-pays, et traduction des resultats en amelioration produit avant la mise en production."
       },
       "bullets": {
         "en": [
-          "Device setup & instrumentation: Standardized Android in-car units; configured developer options, logging, and ADB installs; cut setup time ~40% (~30->18 min) and improved log completeness",
+          "Device setup & instrumentation: Standardized Android in-car units; configured developer options, logging, and ADB installs; cut setup time ~40% (~30 to 18 min) and improved log completeness",
           "Scenario execution: Ran structured routes validating search, alternatives, lane guidance, ETA, arrival (~150+ runs across 5 countries, ~20,000 km)",
           "EV routing: Verified charge-stop planning, alternatives, range display, and battery estimate accuracy; surfaced ~30 high-priority issues and improved recommendations",
           "Positioning & sensor fusion: Stress-tested GPS/vehicle sensors under challenging conditions (roundabouts, figure-8, underground parking, ferries, stacked roads) to reveal map-matching and signal issues",
@@ -76,7 +76,7 @@
           "Collaboration: Worked via Jira, Microsoft Teams, and Confluence; delivered concise debriefs, highlighted risks, onboarded new testers"
         ],
         "fr": [
-          "Configuration & instrumentation des appareils : Standardisé les unités Android embarquées ; configuré les options développeur, la journalisation et les installations ADB ; réduit le temps de configuration d'~40% (~30->18 min) et amélioré la complétude des logs",
+          "Configuration & instrumentation des appareils : Standardise les unites Android embarquees ; configure les options developpeur, la journalisation et les installations ADB ; reduit le temps de configuration de ~40% (~30 a 18 min) et ameliore la completude des logs",
           "Exécution de scénarios : Réalisé des itinéraires structurés validant la recherche, les alternatives, le guidage voie, l'ETA, l'arrivée (~150+ exécutions dans 5 pays, ~20 000 km)",
           "Routage VE : Vérifié la planification des arrêts de charge, les alternatives, l'affichage de l'autonomie et la précision des estimations de batterie ; identifié ~30 problèmes haute priorité",
           "Positionnement & fusion de capteurs : Tests de stress GPS/capteurs véhicule dans des conditions difficiles (ronds-points, figure-8, parking souterrain, ferries, routes superposées)",
@@ -139,8 +139,8 @@
       "end_date": "2024-10",
       "is_current": false,
       "summary": {
-        "en": "Delivered a serverless AWS analytics platform with a React front end to evaluate healthy, affordable, and sustainable diets -compressing complex analyses from hours to minutes, adding QuickSight dashboards for self-service, and a Bedrock-powered chatbot for natural-language insights.",
-        "fr": "Livré une plateforme analytique serverless AWS avec un front-end React pour évaluer des régimes sains, abordables et durables  - compressant les analyses complexes de heures à minutes, ajoutant des tableaux de bord QuickSight en libre-service et un chatbot Bedrock pour des insights en langage naturel."
+        "en": "Delivered a serverless AWS analytics platform with a React front end to evaluate healthy, affordable, and sustainable diets. Compressed complex analyses from hours to minutes, added QuickSight dashboards for self-service, and a Bedrock-powered chatbot for natural-language insights.",
+        "fr": "Livre une plateforme analytique serverless AWS avec un front-end React pour evaluer des regimes sains, abordables et durables. Compresse les analyses complexes de heures a minutes, ajoute des tableaux de bord QuickSight en libre-service et un chatbot Bedrock pour des insights en langage naturel."
       },
       "bullets": {
         "en": [
@@ -211,8 +211,8 @@
       "end_date": "2022-08",
       "is_current": false,
       "summary": {
-        "en": "Automated SAP testing with Selenium/Java and scheduled CI runs in GitHub Actions -raising coverage, reliability, and speed for critical user journeys in an Agile environment.",
-        "fr": "Automatisé les tests SAP avec Selenium/Java et planifié les exécutions CI dans GitHub Actions  - augmentant la couverture, la fiabilité et la vitesse pour les parcours utilisateurs critiques dans un environnement Agile."
+        "en": "Automated SAP testing with Selenium/Java and scheduled CI runs in GitHub Actions, raising coverage, reliability, and speed for critical user journeys in an Agile environment.",
+        "fr": "Automatise les tests SAP avec Selenium/Java et planifie les executions CI dans GitHub Actions, augmentant la couverture, la fiabilite et la vitesse pour les parcours utilisateurs critiques dans un environnement Agile."
       },
       "bullets": {
         "en": [
