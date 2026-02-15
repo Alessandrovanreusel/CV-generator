@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="{{ cv.target_language }}">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="cv_styles.css">
+</head>
+<body>
+<div class="cv-container">
+
+    <!-- ========== SIDEBAR ========== -->
+    <div class="sidebar">
+
+        {% if photo_base64 %}
+        <div class="photo-container">
+            <img src="data:image/jpeg;base64,{{ photo_base64 }}" alt="Photo">
+        </div>
+        {% endif %}
+
+        <!-- Contact -->
+        <div class="section-title">{{ labels.contact }}</div>
+        <div class="contact-item">
+            <span class="icon">✉</span>
+            <span>{{ cv.personal.email }}</span>
+        </div>
+        <div class="contact-item">
+            <span class="icon">☎</span>
+            <span>{{ cv.personal.phone }}</span>
+        </div>
+        <div class="contact-item">
+            <span class="icon">◎</span>
+            <span>{{ cv.personal.location }}</span>
+        </div>
+        {% if cv.personal.linkedin %}
+        <div class="contact-item">
+            <span class="icon">⊞</span>
+            <span>{{ cv.personal.linkedin | replace("https://", "") }}</span>
+        </div>
+        {% endif %}
+
+        <!-- Skills -->
+        <div class="section-title">{{ labels.skills }}</div>
+        {% for skill in flat_skills %}
+        <div class="skill-item">
+            <div class="skill-name">{{ skill }}</div>
+            <div class="skill-bar-bg">
+                <div class="skill-bar-fill" style="width: {{ skill_levels.get(skill, 70) }}%"></div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Languages -->
+        <div class="section-title">{{ labels.languages }}</div>
+        {% for lang in cv.languages %}
+        <div class="lang-item">
+            <span>{{ lang.language }}</span>
+            <span class="lang-dots">
+                {% for i in range(5) %}
+                <span class="lang-dot {{ 'filled' if i < lang_dots.get(lang.level, 3) else '' }}"></span>
+                {% endfor %}
+            </span>
+        </div>
+        {% endfor %}
+
+        <!-- Certifications -->
+        {% if cv.certifications %}
+        <div class="section-title">{{ labels.certifications }}</div>
+        {% for cert in cv.certifications %}
+        <div class="cert-item">
+            <div class="cert-name">{{ cert.name }}</div>
+            {% if cert.issuer %}
+            <div class="cert-detail">{{ cert.issuer }}{% if cert.date %} · {{ cert.date }}{% endif %}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+        {% endif %}
+
+        <!-- Volunteering -->
+        {% if cv.volunteering %}
+        <div class="section-title">{{ labels.volunteering }}</div>
+        {% for vol in cv.volunteering %}
+        <div class="volunteer-item">
+            <div class="volunteer-org">{{ vol.organization }}</div>
+            <div>{{ vol.role }}</div>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+
+    <!-- ========== MAIN CONTENT ========== -->
+    <div class="main-content">
+
+        <!-- Name & Title -->
+        <div class="name">{{ cv.personal.name }}</div>
+        <div class="title">{{ cv.personal.title }}</div>
+
+        <!-- Professional Summary -->
+        <div class="section-title">{{ labels.summary }}</div>
+        <div class="summary-text">{{ cv.summary }}</div>
+
+        <!-- Experience -->
+        <div class="section-title">{{ labels.experience }}</div>
+        {% for exp in cv.experience %}
+        <div class="experience-entry">
+            <div class="exp-header">
+                <span class="exp-company">{{ exp.company }}</span>
+                <span class="exp-date">{{ exp.start_date }} – {{ exp.end_date or labels.present }}</span>
+            </div>
+            <div class="exp-title-location">{{ exp.title }} · {{ exp.location }}</div>
+            <ul class="exp-bullets">
+                {% for bullet in exp.bullets %}
+                <li>{{ bullet }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endfor %}
+
+        <!-- Education -->
+        <div class="section-title">{{ labels.education }}</div>
+        {% for edu in cv.education %}
+        <div class="education-entry">
+            <div class="edu-header">
+                <span class="edu-institution">{{ edu.institution }}</span>
+                <span class="edu-date">{{ edu.start_date }} – {{ edu.end_date }}</span>
+            </div>
+            <div class="edu-degree">{{ edu.degree }}</div>
+            {% if edu.details %}
+            <div class="edu-details">{{ edu.details | join('; ') }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <!-- Projects -->
+        {% if cv.projects %}
+        <div class="section-title">{{ labels.projects }}</div>
+        {% for proj in cv.projects %}
+        <div class="project-entry">
+            <span class="proj-name">{{ proj.name }}</span>
+            <span class="proj-desc"> — {{ proj.technologies | join(', ') }}{% if proj.description %}. {{ proj.description }}{% endif %}</span>
+        </div>
+        {% endfor %}
+        {% endif %}
+
+    </div>
+
+</div>
+</body>
+</html>

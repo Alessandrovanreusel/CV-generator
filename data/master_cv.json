@@ -1,0 +1,419 @@
+{
+  "personal_info": {
+    "name": "Alessandro van Reusel",
+    "title": {
+      "en": "Software & Test Engineer Consultant — Full-Stack, Cloud & AI",
+      "fr": "Consultant Ingénieur Logiciel & Test — Full-Stack, Cloud & IA"
+    },
+    "location": "Amsterdam, Netherlands",
+    "phone": "+33 7 83 93 44 01",
+    "email": "alessandro.van.reusel@gmail.com",
+    "commercial_email": "alessandro.reusel@capgemini.com",
+    "linkedin": "https://linkedin.com/in/alessandrovan-reusel",
+    "photo": "data/photo.jpg"
+  },
+  "professional_summary": {
+    "en": "Detail-driven Software/Test Engineer and Full-Stack Developer with experience across AI knowledge systems, cloud-native analytics, and on-road validation for automotive navigation & EV routing. Delivered measurable impact with AWS, Azure, React, Neo4j, and test automation (Selenium/Java). Comfortable collaborating in cross-functional teams to ship reliable, scalable solutions with clear business outcomes.",
+    "fr": "Ingénieur Logiciel/Test et Développeur Full-Stack méticuleux avec une expérience dans les systèmes de connaissances IA, l'analytique cloud-native et la validation sur route pour la navigation automobile et le routage VE. Impact mesurable avec AWS, Azure, React, Neo4j et l'automatisation de tests (Selenium/Java). À l'aise dans la collaboration au sein d'équipes transversales pour livrer des solutions fiables et évolutives avec des résultats commerciaux clairs."
+  },
+  "experience": [
+    {
+      "id": "exp-capgemini",
+      "company": "Capgemini",
+      "title": {
+        "en": "Software Engineering Consultant",
+        "fr": "Consultant en Ingénierie Logicielle"
+      },
+      "location": "Utrecht",
+      "start_date": "2023-09",
+      "end_date": null,
+      "is_current": true,
+      "summary": {
+        "en": "Consultant delivering software and IT solutions across domains—translating business needs into reliable, scalable implementations and collaborating tightly with cross-functional teams to ship on time and within budget.",
+        "fr": "Consultant livrant des solutions logicielles et IT dans divers domaines — traduisant les besoins métier en implémentations fiables et évolutives, collaborant étroitement avec des équipes transversales pour livrer dans les délais et le budget."
+      },
+      "bullets": {
+        "en": [
+          "Delivered tailored consulting to improve client processes and outcomes",
+          "Contributed to the development and implementation of software aligned with specifications and standards",
+          "Partnered cross-functionally to meet timelines and budgets, elevating satisfaction and results"
+        ],
+        "fr": [
+          "Fourni du conseil sur mesure pour améliorer les processus et résultats clients",
+          "Contribué au développement et à l'implémentation de logiciels conformes aux spécifications et normes",
+          "Collaboré de manière transversale pour respecter les délais et budgets, améliorant la satisfaction et les résultats"
+        ]
+      },
+      "skills_used": ["Python", "Java", "TypeScript", "React", "AWS", "Azure", "Docker", "Agile/Scrum"],
+      "is_parent": true,
+      "sub_experiences": ["exp-tomtom", "exp-geppetto", "exp-wfp", "exp-quantum"],
+      "parent_id": null
+    },
+    {
+      "id": "exp-tomtom",
+      "company": "TomTom (Capgemini project)",
+      "title": {
+        "en": "Test Engineer",
+        "fr": "Ingénieur Test"
+      },
+      "location": "Eindhoven",
+      "start_date": "2024-10",
+      "end_date": "2025-11",
+      "is_current": false,
+      "summary": {
+        "en": "On-road validation for TomTom's Automotive Navigation & EV Routing—owning daily test readiness, executing multi-country road scenarios, and translating evidenced findings into product hardening before release.",
+        "fr": "Validation sur route pour la Navigation Automobile et le Routage VE de TomTom — responsable de la préparation quotidienne des tests, exécution de scénarios routiers multi-pays, et traduction des résultats en amélioration produit avant la mise en production."
+      },
+      "bullets": {
+        "en": [
+          "Device setup & instrumentation: Standardized Android in-car units; configured developer options, logging, and ADB installs; cut setup time ≈40% (≈30→18 min) and improved log completeness",
+          "Scenario execution: Ran structured routes validating search, alternatives, lane guidance, ETA, arrival (~150+ runs across 5 countries, ~20,000 km)",
+          "EV routing: Verified charge-stop planning, alternatives, range display, and battery estimate accuracy; surfaced ~30 high-priority issues and improved recommendations",
+          "Positioning & sensor fusion: Stress-tested GPS/vehicle sensors under challenging conditions (roundabouts, figure-8, underground parking, ferries, stacked roads) to reveal map-matching and signal issues",
+          "Evidence-driven bug reporting: Filed reproducible Jira reports with steps, labels, and logs/screens/video",
+          "Ownership & decision-making: Set go/no-go for reruns; focused testing by risk/urgency; coordinated fixes and retests with navigation, maps, and design teams",
+          "Scripting & efficiency: Automated repetitive tasks with Bash/Python (installs, exports, timestamps, log rotation), cutting manual steps ~60% and saving ~4–6 hrs/week",
+          "Collaboration: Worked via Jira, Microsoft Teams, and Confluence; delivered concise debriefs, highlighted risks, onboarded new testers"
+        ],
+        "fr": [
+          "Configuration & instrumentation des appareils : Standardisé les unités Android embarquées ; configuré les options développeur, la journalisation et les installations ADB ; réduit le temps de configuration d'≈40% (≈30→18 min) et amélioré la complétude des logs",
+          "Exécution de scénarios : Réalisé des itinéraires structurés validant la recherche, les alternatives, le guidage voie, l'ETA, l'arrivée (~150+ exécutions dans 5 pays, ~20 000 km)",
+          "Routage VE : Vérifié la planification des arrêts de charge, les alternatives, l'affichage de l'autonomie et la précision des estimations de batterie ; identifié ~30 problèmes haute priorité",
+          "Positionnement & fusion de capteurs : Tests de stress GPS/capteurs véhicule dans des conditions difficiles (ronds-points, figure-8, parking souterrain, ferries, routes superposées)",
+          "Rapports de bugs basés sur les preuves : Tickets Jira reproductibles avec étapes, labels et logs/captures/vidéos",
+          "Responsabilité & prise de décision : Décisions go/no-go pour les reprises de tests ; priorisation par risque/urgence ; coordination des correctifs avec les équipes navigation, cartes et design",
+          "Scripts & efficacité : Automatisé les tâches répétitives avec Bash/Python (installations, exports, horodatages, rotation des logs), réduisant les étapes manuelles de ~60% et économisant ~4-6 h/semaine",
+          "Collaboration : Travaillé via Jira, Microsoft Teams et Confluence ; débriefings concis, mise en avant des risques, intégration des nouveaux testeurs"
+        ]
+      },
+      "skills_used": ["Selenium", "Java", "Kotlin", "Bash", "Python", "ADB", "Jira", "Confluence", "Test Automation", "TMAP"],
+      "is_parent": false,
+      "sub_experiences": [],
+      "parent_id": "exp-capgemini"
+    },
+    {
+      "id": "exp-geppetto",
+      "company": "Capgemini",
+      "title": {
+        "en": "AI Solutions Engineer, \"Geppetto\" Knowledge Management Platform",
+        "fr": "Ingénieur Solutions IA, Plateforme de Gestion des Connaissances \"Geppetto\""
+      },
+      "location": "Utrecht",
+      "start_date": "2024-05",
+      "end_date": "2024-10",
+      "is_current": false,
+      "summary": {
+        "en": "Built an AI-graph knowledge platform on Azure that fuses GPT-4 with Neo4j to deliver traceable, citation-backed answers; designed ingestion, retrieval, and CI/CD to improve accuracy, speed, and reliability for enterprise users.",
+        "fr": "Construit une plateforme de connaissances IA-graphe sur Azure fusionnant GPT-4 avec Neo4j pour fournir des réponses traçables et sourcées ; conçu l'ingestion, la recherche et le CI/CD pour améliorer la précision, la vitesse et la fiabilité pour les utilisateurs entreprise."
+      },
+      "bullets": {
+        "en": [
+          "Ingestion pipelines: Python + Azure Functions using Azure OpenAI (GPT-4) to extract entities/relations into Neo4j; ~3× throughput and ~40% faster per document",
+          "Retrieval architecture: Replaced keyword/vector-only search with graph-based retrieval; accuracy ~+22% and context retention ~+30% with 100% cited sources",
+          "Chatbot UI: Streamlit app with caching; ~35% faster time-to-answer",
+          "CI/CD & environment: Azure DevOps + Docker to deploy back end, Neo4j, and UI; ~60% faster deploys and >95% pipeline success",
+          "Governance & reliability: Rules + source grounding reduced unsupported claims ~45%; ensured 100% answers with citations in tests"
+        ],
+        "fr": [
+          "Pipelines d'ingestion : Python + Azure Functions utilisant Azure OpenAI (GPT-4) pour extraire entités/relations dans Neo4j ; débit ~3× et ~40% plus rapide par document",
+          "Architecture de recherche : Remplacé la recherche par mots-clés/vecteurs par une recherche basée sur les graphes ; précision ~+22% et rétention de contexte ~+30% avec 100% de sources citées",
+          "Interface chatbot : Application Streamlit avec cache ; ~35% plus rapide pour obtenir une réponse",
+          "CI/CD & environnement : Azure DevOps + Docker pour déployer le backend, Neo4j et l'UI ; ~60% de déploiements plus rapides et >95% de succès du pipeline",
+          "Gouvernance & fiabilité : Règles + ancrage des sources réduit les affirmations non étayées de ~45% ; 100% de réponses avec citations dans les tests"
+        ]
+      },
+      "skills_used": ["Python", "Azure Functions", "Azure OpenAI", "GPT-4", "Neo4j", "Streamlit", "Docker", "Azure DevOps", "CI/CD", "Knowledge Graphs", "Prompt Engineering"],
+      "is_parent": false,
+      "sub_experiences": [],
+      "parent_id": "exp-capgemini"
+    },
+    {
+      "id": "exp-wfp",
+      "company": "World Food Programme (Capgemini)",
+      "title": {
+        "en": "Full-Stack Developer, Project ENHANCE",
+        "fr": "Développeur Full-Stack, Projet ENHANCE"
+      },
+      "location": "Utrecht",
+      "start_date": "2024-01",
+      "end_date": "2024-10",
+      "is_current": false,
+      "summary": {
+        "en": "Delivered a serverless AWS analytics platform with a React front end to evaluate healthy, affordable, and sustainable diets—compressing complex analyses from hours to minutes, adding QuickSight dashboards for self-service, and a Bedrock-powered chatbot for natural-language insights.",
+        "fr": "Livré une plateforme analytique serverless AWS avec un front-end React pour évaluer des régimes sains, abordables et durables — compressant les analyses complexes de heures à minutes, ajoutant des tableaux de bord QuickSight en libre-service et un chatbot Bedrock pour des insights en langage naturel."
+      },
+      "bullets": {
+        "en": [
+          "Cloud architecture & scalability: AWS Lambda, API Gateway, DynamoDB, S3, CloudWatch; analysis time cut from hours to minutes (~95% faster) and compute cost down ~25–30%",
+          "CI/CD & automation: Azure DevOps pipelines deploying safely to AWS with checks and one-click rollback; ~60% faster releases, >95% reliability, cadence from weekly to daily",
+          "Testing & monitoring: Automated tests plus dashboards/alerts (CloudWatch); time-to-detect from ~30 min to ~5 min and MTTR from ~4 h to ~1.5 h",
+          "BI & visualization: QuickSight dashboards enabling self-service for 20+ stakeholders across 12 KPIs; ad-hoc analysis from ~2 days to <1 hour",
+          "GenAI chatbot: Amazon Bedrock + React with auto-generated charts and citations; ~50% faster time-to-insight"
+        ],
+        "fr": [
+          "Architecture cloud & scalabilité : AWS Lambda, API Gateway, DynamoDB, S3, CloudWatch ; temps d'analyse réduit de heures à minutes (~95% plus rapide) et coûts de calcul réduits de ~25-30%",
+          "CI/CD & automatisation : Pipelines Azure DevOps déployant en toute sécurité sur AWS avec vérifications et rollback en un clic ; ~60% de releases plus rapides, >95% de fiabilité, cadence passée d'hebdomadaire à quotidienne",
+          "Tests & monitoring : Tests automatisés + tableaux de bord/alertes (CloudWatch) ; temps de détection de ~30 min à ~5 min et MTTR de ~4 h à ~1.5 h",
+          "BI & visualisation : Tableaux de bord QuickSight en libre-service pour 20+ parties prenantes sur 12 KPIs ; analyses ad-hoc de ~2 jours à <1 heure",
+          "Chatbot GenAI : Amazon Bedrock + React avec graphiques auto-générés et citations ; ~50% plus rapide pour obtenir un insight"
+        ]
+      },
+      "skills_used": ["AWS Lambda", "API Gateway", "DynamoDB", "S3", "CloudWatch", "React", "Amazon Bedrock", "Amazon QuickSight", "Azure DevOps", "CI/CD", "Python", "JavaScript"],
+      "is_parent": false,
+      "sub_experiences": [],
+      "parent_id": "exp-capgemini"
+    },
+    {
+      "id": "exp-quantum",
+      "company": "Capgemini Quantum Lab",
+      "title": {
+        "en": "Quantum Interactive Experience Developer (\"Quantum Puzzle\")",
+        "fr": "Développeur d'Expérience Interactive Quantique (\"Quantum Puzzle\")"
+      },
+      "location": "Utrecht",
+      "start_date": "2023-12",
+      "end_date": "2024-02",
+      "is_current": false,
+      "summary": {
+        "en": "Created an immersive, educational quantum-themed game by combining a Raspberry-Pi-hosted JavaScript app with Philips Hue lighting; packaged as a plug-and-play setup for reliable demos and fast onboarding.",
+        "fr": "Créé un jeu éducatif immersif à thème quantique en combinant une application JavaScript hébergée sur Raspberry Pi avec un éclairage Philips Hue ; packagé en installation plug-and-play pour des démos fiables et une intégration rapide."
+      },
+      "bullets": {
+        "en": [
+          "Device setup & configuration: Prepared Raspberry Pi hardware/OS and autostart services; ~50% faster operator setup and crash-free demos across sessions",
+          "Lighting integration: Synced Philips Hue effects with game states; 100% in-sync cues for improved immersion",
+          "Game mechanics & UI: Extended HTML/CSS/JS; linked on-screen actions to lighting for responsive, engaging feedback",
+          "Documentation & onboarding: Authored setup/user guides; onboarding time down ~60%",
+          "Testing & reliability: End-to-end timing/flow tests; >99% successful runs during lab demos"
+        ],
+        "fr": [
+          "Configuration des appareils : Préparé le matériel/OS Raspberry Pi et les services de démarrage automatique ; ~50% plus rapide pour la mise en place et démos sans plantage",
+          "Intégration éclairage : Synchronisé les effets Philips Hue avec les états du jeu ; 100% de signaux synchronisés pour une immersion améliorée",
+          "Mécanique de jeu & UI : Étendu HTML/CSS/JS ; lié les actions à l'écran à l'éclairage pour un retour réactif et engageant",
+          "Documentation & intégration : Rédigé des guides de configuration/utilisation ; temps d'intégration réduit de ~60%",
+          "Tests & fiabilité : Tests de timing/flux de bout en bout ; >99% d'exécutions réussies lors des démos en laboratoire"
+        ]
+      },
+      "skills_used": ["JavaScript", "HTML", "CSS", "Raspberry Pi", "Philips Hue API", "IoT"],
+      "is_parent": false,
+      "sub_experiences": [],
+      "parent_id": "exp-capgemini"
+    },
+    {
+      "id": "exp-bnc",
+      "company": "National Bank of Canada",
+      "title": {
+        "en": "Test Automation Intern",
+        "fr": "Stagiaire en Automatisation de Tests"
+      },
+      "location": "Montréal",
+      "start_date": "2022-05",
+      "end_date": "2022-08",
+      "is_current": false,
+      "summary": {
+        "en": "Automated SAP testing with Selenium/Java and scheduled CI runs in GitHub Actions—raising coverage, reliability, and speed for critical user journeys in an Agile environment.",
+        "fr": "Automatisé les tests SAP avec Selenium/Java et planifié les exécutions CI dans GitHub Actions — augmentant la couverture, la fiabilité et la vitesse pour les parcours utilisateurs critiques dans un environnement Agile."
+      },
+      "bullets": {
+        "en": [
+          "Test automation: Converted manual SAP tests into maintainable Selenium/Java suites with data-driven inputs and clear assertions; ~40% higher automated coverage and ~60% less manual effort",
+          "CI/CD scheduling: Weekly GitHub Actions with clean setup, headless execution, and artifacts (logs, screenshots, HTML reports); >95% on-time executions",
+          "Reliability & coverage: Reduced flaky tests ~70% with better waits/helpers; expanded coverage across login, transaction processing, reporting",
+          "Defect reporting & code quality: Reproducible bug reports; Page Object Model utilities lowered maintenance ~25% and sped up fixes ~30%"
+        ],
+        "fr": [
+          "Automatisation de tests : Converti les tests SAP manuels en suites Selenium/Java maintenables avec entrées data-driven et assertions claires ; ~40% de couverture automatisée en plus et ~60% d'effort manuel en moins",
+          "Planification CI/CD : GitHub Actions hebdomadaires avec configuration propre, exécution headless et artefacts (logs, captures, rapports HTML) ; >95% d'exécutions à temps",
+          "Fiabilité & couverture : Réduit les tests instables de ~70% avec de meilleurs waits/helpers ; étendu la couverture sur login, traitement de transactions, reporting",
+          "Rapports de défauts & qualité du code : Rapports de bugs reproductibles ; utilitaires Page Object Model réduisant la maintenance de ~25% et accélérant les corrections de ~30%"
+        ]
+      },
+      "skills_used": ["Selenium", "Java", "GitHub Actions", "SAP", "CI/CD", "Agile/Scrum", "Test Automation"],
+      "is_parent": false,
+      "sub_experiences": [],
+      "parent_id": null
+    }
+  ],
+  "education": [
+    {
+      "institution": "Polytechnique Montréal",
+      "degree": {
+        "en": "B.Eng., Software Engineering",
+        "fr": "B.Ing., Génie Logiciel"
+      },
+      "start_date": "2017-09",
+      "end_date": "2022-12",
+      "coursework": {
+        "en": "Data Structures & Algorithms, Distributed Systems & Cloud, Operating Systems, Software Testing & Validation, Software Architecture, Databases, AI: Methods & Algorithms, Cybersecurity, HCI, Probability & Statistics",
+        "fr": "Structures de données & Algorithmes, Systèmes distribués & Cloud, Systèmes d'exploitation, Tests & Validation logicielle, Architecture logicielle, Bases de données, IA : Méthodes & Algorithmes, Cybersécurité, IHM, Probabilités & Statistiques"
+      }
+    },
+    {
+      "institution": "Lycée Français International de Tokyo",
+      "degree": {
+        "en": "Scientific Baccalauréat (Mention Très Bien), European Section",
+        "fr": "Baccalauréat Scientifique (Mention Très Bien), Section Européenne"
+      },
+      "start_date": "2014",
+      "end_date": "2017",
+      "coursework": null
+    }
+  ],
+  "skills": {
+    "Programming": ["Python", "Java", "C++", "JavaScript", "TypeScript", "Kotlin", "SQL", "Gherkin", "Shell/Bash"],
+    "Frontend": ["React.js", "Next.js", "React Native", "Angular", "HTML", "CSS"],
+    "Backend & Cloud": ["AWS (Lambda, API Gateway, DynamoDB, S3, CloudWatch)", "Azure (Functions, DevOps)", "Docker", "CI/CD"],
+    "AI & Graphs": ["Azure OpenAI (GPT-4)", "Amazon Bedrock", "Neo4j", "Prompt Engineering", "Knowledge Graphs"],
+    "Testing & DevOps": ["Selenium (Java)", "GitHub Actions", "Jira/Confluence", "Agile/Scrum", "Test Automation"],
+    "Data & BI": ["Amazon QuickSight", "MATLAB"],
+    "Tools": ["Git", "ADB", "VS Code", "Raspberry Pi"]
+  },
+  "languages": [
+    {
+      "language": {
+        "en": "English",
+        "fr": "Anglais"
+      },
+      "level": {
+        "en": "Native",
+        "fr": "Langue maternelle"
+      }
+    },
+    {
+      "language": {
+        "en": "French",
+        "fr": "Français"
+      },
+      "level": {
+        "en": "Bilingual",
+        "fr": "Bilingue"
+      }
+    },
+    {
+      "language": {
+        "en": "Italian",
+        "fr": "Italien"
+      },
+      "level": {
+        "en": "Fluent",
+        "fr": "Courant"
+      }
+    },
+    {
+      "language": {
+        "en": "Dutch",
+        "fr": "Néerlandais"
+      },
+      "level": {
+        "en": "Intermediate",
+        "fr": "Intermédiaire"
+      }
+    },
+    {
+      "language": {
+        "en": "Spanish",
+        "fr": "Espagnol"
+      },
+      "level": {
+        "en": "Basic",
+        "fr": "Basique"
+      }
+    },
+    {
+      "language": {
+        "en": "Japanese",
+        "fr": "Japonais"
+      },
+      "level": {
+        "en": "Basic",
+        "fr": "Basique"
+      }
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Prompt Engineering for ChatGPT",
+      "issuer": "Vanderbilt University",
+      "date": "2024-05",
+      "relevance_tags": ["AI", "Prompt Engineering", "GPT"]
+    },
+    {
+      "name": "Business Course",
+      "issuer": "Ohio University",
+      "date": "2023-11",
+      "relevance_tags": ["Business", "Management"]
+    },
+    {
+      "name": "TMAP® Quality for Cross-Functional Teams",
+      "issuer": "iSQI",
+      "date": "2023-10",
+      "relevance_tags": ["Testing", "Quality Assurance", "TMAP"]
+    },
+    {
+      "name": "Neural Networks and Deep Learning",
+      "issuer": "DeepLearning.AI",
+      "date": "2023-04",
+      "relevance_tags": ["AI", "Deep Learning", "Neural Networks"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "E-Commerce App (Epipresto)",
+      "description": {
+        "en": "E-Commerce application built with GraphQL, React Native, and React.js",
+        "fr": "Application e-commerce construite avec GraphQL, React Native et React.js"
+      },
+      "technologies": ["GraphQL", "React Native", "React.js"]
+    },
+    {
+      "name": {
+        "en": "Multi-User Drawing Collaboration",
+        "fr": "Collaboration de Dessin Multi-Utilisateurs"
+      },
+      "description": {
+        "en": "Web/mobile apps for collaborative drawing; integrated requirements, networks, validation/testing",
+        "fr": "Applications web/mobile pour le dessin collaboratif ; intégration des exigences, réseaux, validation/tests"
+      },
+      "technologies": []
+    },
+    {
+      "name": "Web Drawing App (SCRUM + TDD)",
+      "description": {
+        "en": "Web drawing application developed using SCRUM methodology and Test-Driven Development",
+        "fr": "Application de dessin web développée avec la méthodologie SCRUM et le développement piloté par les tests"
+      },
+      "technologies": ["Angular", "MongoDB", "Node.js", "Express", "Jasmine", "Mocha", "Karma"]
+    },
+    {
+      "name": {
+        "en": "Embedded Systems Project",
+        "fr": "Projet Systèmes Embarqués"
+      },
+      "description": {
+        "en": "Microcontroller system; multi-level programming, config management, inspection & testing",
+        "fr": "Système microcontrôleur ; programmation multi-niveaux, gestion de configuration, inspection & tests"
+      },
+      "technologies": ["C++", "Git"]
+    },
+    {
+      "name": "CallNext",
+      "description": {
+        "en": "Sports meetup mobile app (ongoing)",
+        "fr": "Application mobile de rencontres sportives (en cours)"
+      },
+      "technologies": ["Next.js", "Kotlin"]
+    }
+  ],
+  "volunteering": [
+    {
+      "organization": "UNICEF Netherlands",
+      "role": {
+        "en": "Volunteer",
+        "fr": "Bénévole"
+      },
+      "start_date": "2023-02",
+      "end_date": null,
+      "is_current": true
+    }
+  ]
+}

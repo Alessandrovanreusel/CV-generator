@@ -1,0 +1,245 @@
+{
+  "project": "CV Generator",
+  "version": "1.0.0",
+  "description": "A Python CLI that ingests job ads, analyzes them with Claude API, tailors a master CV to match, and generates a stylish ATS-optimized PDF in English or French.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Project Scaffolding",
+      "description": "Set up the project structure with all necessary directories, configuration files, dependency management, master CV data file, and gitignore so that the codebase is ready for feature development.",
+      "acceptanceCriteria": [
+        "pyproject.toml exists with all dependencies listed (anthropic, click, pydantic, python-dotenv, weasyprint, jinja2, beautifulsoup4, lxml, PyMuPDF, requests, langdetect, python-jobspy, playwright, pytest)",
+        "Directory structure created: src/, src/scraper/, src/analyzer/, src/tailor/, src/generator/, src/utils/, data/, tests/, tests/fixtures/, output/",
+        "All __init__.py files are present in src/ and its subdirectories",
+        "src/config.py loads ANTHROPIC_API_KEY from .env via python-dotenv and exposes a Settings pydantic model",
+        "data/master_cv.json exists with a complete bilingual master CV including personal info, summary, experience (with parent/child structure), skills (categorized), education, languages, and certifications",
+        ".gitignore includes output/, .env, __pycache__/, *.pyc, .pytest_cache/, dist/, *.egg-info/",
+        "Running 'python -c \"from src.config import Settings\"' succeeds without error"
+      ],
+      "priority": 1,
+      "passes": true,
+      "notes": "Foundation story. All other stories depend on this. master_cv.json must have realistic data with bilingual en/fr fields and id references."
+    },
+    {
+      "id": "US-002",
+      "title": "Pydantic Data Models",
+      "description": "Define the core Pydantic models for JobRequirements and TailoredCV that serve as the contracts between the analyzer, tailor, and generator modules.",
+      "acceptanceCriteria": [
+        "src/analyzer/models.py defines JobRequirements with fields: title, company, location, required_skills (list), preferred_skills (list), experience_years (optional int), responsibilities (list), language (str), raw_text (str)",
+        "src/tailor/models.py defines TailoredCV with fields matching the master CV structure but with selected/reordered content: personal_info, summary (BilingualText), experience (list of TailoredExperience), skills (categorized dict), education, languages, certifications",
+        "BilingualText model exists with 'en' and 'fr' string fields and is reused across both modules",
+        "All models use strict Pydantic v2 syntax with model_config and field validators where appropriate",
+        "Unit tests in tests/test_models.py validate model creation, serialization, and validation error handling",
+        "Tests pass: python -m pytest tests/test_models.py -x -v"
+      ],
+      "priority": 2,
+      "passes": true,
+      "notes": "These models are the inter-module contracts. Analyzer produces JobRequirements; Tailor consumes JobRequirements + MasterCV and produces TailoredCV; Generator consumes TailoredCV."
+    },
+    {
+      "id": "US-003",
+      "title": "File Scraper",
+      "description": "Implement a file-based scraper that can extract text content from local PDF, HTML, and TXT job ad files.",
+      "acceptanceCriteria": [
+        "src/scraper/file_scraper.py exposes a function scrape_file(path: Path) -> str that returns extracted text",
+        "PDF extraction uses PyMuPDF (fitz) to extract text from all pages",
+        "HTML extraction uses BeautifulSoup to strip tags and return clean text",
+        "TXT files are read directly with UTF-8 encoding",
+        "Raises a clear ValueError for unsupported file types",
+        "Unit tests in tests/test_file_scraper.py cover PDF, HTML, TXT, and unsupported formats using fixture files in tests/fixtures/",
+        "Tests pass: python -m pytest tests/test_file_scraper.py -x -v"
+      ],
+      "priority": 3,
+      "passes": true,
+      "notes": "Create minimal test fixture files (sample.pdf, sample.html, sample.txt) in tests/fixtures/. PDF fixture can be generated programmatically in test setup."
+    },
+    {
+      "id": "US-004",
+      "title": "URL Scraper",
+      "description": "Implement a URL scraper that fetches job ad content from web pages, with Playwright fallback for JavaScript-rendered content.",
+      "acceptanceCriteria": [
+        "src/scraper/url_scraper.py exposes async function scrape_url(url: str) -> str",
+        "First attempts a simple requests.get with appropriate headers and timeout",
+        "If content looks empty or JS-heavy, falls back to Playwright for full rendering",
+        "HTML is parsed with BeautifulSoup to extract meaningful text (strips nav, footer, ads)",
+        "Raises ConnectionError or TimeoutError with descriptive messages on failure",
+        "Unit tests in tests/test_url_scraper.py mock both requests and playwright, testing success and fallback scenarios",
+        "Tests pass: python -m pytest tests/test_url_scraper.py -x -v"
+      ],
+      "priority": 4,
+      "passes": true,
+      "notes": "All network calls must be mocked in tests. Playwright is optional — code should handle ImportError gracefully if playwright is not installed."
+    },
+    {
+      "id": "US-005",
+      "title": "Board Scraper",
+      "description": "Implement a job board scraper that searches LinkedIn, Indeed, and Glassdoor via the python-jobspy library and returns matching job listings.",
+      "acceptanceCriteria": [
+        "src/scraper/board_scraper.py exposes function scrape_boards(query: str, location: str, num_results: int = 5) -> list[dict]",
+        "Uses python-jobspy to search across supported job boards",
+        "Returns a list of dicts with keys: title, company, location, url, description",
+        "Handles jobspy exceptions gracefully and returns partial results if some boards fail",
+        "Accepts optional site_name parameter to restrict search to specific boards",
+        "Unit tests in tests/test_board_scraper.py mock the jobspy scrape function and test normal and error scenarios",
+        "Tests pass: python -m pytest tests/test_board_scraper.py -x -v"
+      ],
+      "priority": 5,
+      "passes": true,
+      "notes": "JobSpy returns a pandas DataFrame. Convert to list of dicts for downstream use. Mock the jobspy.scrape call in tests."
+    },
+    {
+      "id": "US-006",
+      "title": "Language Detection Utility",
+      "description": "Implement a language detection utility that identifies whether a job ad is in English or French, used to determine the output language of the tailored CV.",
+      "acceptanceCriteria": [
+        "src/utils/language.py exposes function detect_language(text: str) -> str returning 'en' or 'fr'",
+        "Uses langdetect library with deterministic seeding for reproducible results",
+        "Falls back to 'en' if detection confidence is low or language is unsupported",
+        "Handles empty or very short text gracefully without crashing",
+        "Unit tests in tests/test_language.py test English text, French text, empty text, and mixed-language text",
+        "Tests pass: python -m pytest tests/test_language.py -x -v"
+      ],
+      "priority": 6,
+      "passes": true,
+      "notes": "Use langdetect.DetectorFactory.seed = 0 for deterministic results. Only support en/fr; map other detected languages to 'en'."
+    },
+    {
+      "id": "US-007",
+      "title": "Job Analyzer",
+      "description": "Implement the job analyzer that sends scraped job text to the Claude API and extracts structured JobRequirements from the response.",
+      "acceptanceCriteria": [
+        "src/analyzer/analyzer.py exposes async function analyze_job(text: str, client: anthropic.Anthropic | None = None) -> JobRequirements",
+        "Sends a structured prompt to Claude API asking for JSON extraction of job requirements",
+        "Uses claude-sonnet-4-20250514 model for cost-effectiveness",
+        "Parses Claude's JSON response into a JobRequirements Pydantic model",
+        "Handles API errors (rate limit, auth, network) with descriptive error messages",
+        "Client parameter allows dependency injection for testing",
+        "Unit tests in tests/test_analyzer.py mock the anthropic client and test successful parsing and error handling",
+        "Tests pass: python -m pytest tests/test_analyzer.py -x -v"
+      ],
+      "priority": 7,
+      "passes": true,
+      "notes": "The prompt should instruct Claude to return valid JSON matching the JobRequirements schema. Include the schema description in the prompt for best results."
+    },
+    {
+      "id": "US-008",
+      "title": "CV Tailor Core",
+      "description": "Implement the core CV tailoring engine that rewrites the summary, enhances bullet points, and reorders skills based on job requirements.",
+      "acceptanceCriteria": [
+        "src/tailor/tailor.py exposes async function tailor_cv(job: JobRequirements, master_cv: dict, language: str, client: anthropic.Anthropic | None = None) -> TailoredCV",
+        "Rewrites the professional summary to align with the target job, in the detected language",
+        "Enhances experience bullet points to emphasize relevant keywords from the job requirements",
+        "Reorders skills to place job-relevant skills first within each category",
+        "Never invents fake experiences, companies, or skills not present in master_cv.json",
+        "Client parameter allows dependency injection for testing",
+        "Unit tests in tests/test_tailor.py mock Claude API calls and verify output structure matches TailoredCV model",
+        "Tests pass: python -m pytest tests/test_tailor.py -x -v"
+      ],
+      "priority": 8,
+      "passes": true,
+      "notes": "The tailor uses Claude API for summary rewriting and bullet enhancement, but uses rule-based logic for skill reordering. Must preserve all real data from master CV."
+    },
+    {
+      "id": "US-009",
+      "title": "Experience Selection Strategy",
+      "description": "Implement rule-based experience selection and ranking that chooses the most relevant experiences from the master CV based on job requirements.",
+      "acceptanceCriteria": [
+        "src/tailor/strategy.py exposes function select_experiences(job: JobRequirements, experiences: list[dict]) -> list[dict]",
+        "Scores each experience based on keyword overlap with job required_skills and responsibilities",
+        "Handles parent/child experience structure (Capgemini umbrella with sub-projects)",
+        "Returns experiences sorted by relevance score, with a configurable max count (default 5)",
+        "Preserves the original experience data without modification, only selects and orders",
+        "Unit tests in tests/test_strategy.py test scoring logic, parent/child handling, and max count limiting",
+        "Tests pass: python -m pytest tests/test_strategy.py -x -v"
+      ],
+      "priority": 9,
+      "passes": true,
+      "notes": "This is pure Python logic, no API calls. Keyword matching should be case-insensitive and handle partial matches. Parent experience inherits relevance from its children."
+    },
+    {
+      "id": "US-010",
+      "title": "PDF Generator with Stylish Sidebar Layout",
+      "description": "Implement the PDF generator using Jinja2 HTML templates and WeasyPrint to produce a stylish, ATS-optimized CV with a sidebar layout.",
+      "acceptanceCriteria": [
+        "src/generator/generator.py exposes function generate_pdf(cv: TailoredCV, output_path: Path, language: str = 'en') -> Path",
+        "Uses a Jinja2 HTML template stored in src/generator/templates/cv_template.html",
+        "CSS creates a two-column layout: main content area (70%) + colored sidebar (30%) with contact info, skills, languages, certifications",
+        "Typography uses professional fonts (system fonts with web-safe fallbacks)",
+        "ATS-friendly: real text (not images), proper heading hierarchy, semantic HTML",
+        "Output PDF is saved to the specified output_path and the path is returned",
+        "Unit tests in tests/test_generator.py mock WeasyPrint and verify HTML generation and template rendering",
+        "Tests pass: python -m pytest tests/test_generator.py -x -v"
+      ],
+      "priority": 10,
+      "passes": true,
+      "notes": "WeasyPrint can be tricky on Windows. Tests should mock the WeasyPrint HTML().write_pdf() call. Focus on verifying the HTML output is correct."
+    },
+    {
+      "id": "US-011",
+      "title": "Photo Integration in PDF",
+      "description": "Add support for embedding a circular profile photo in the PDF sidebar, with graceful fallback when no photo is available.",
+      "acceptanceCriteria": [
+        "src/generator/generator.py accepts an optional photo_path parameter",
+        "Photo is embedded as base64 data URI in the HTML template to avoid file path issues in WeasyPrint",
+        "CSS applies circular crop (border-radius: 50%) and appropriate sizing (120x120px)",
+        "When no photo is provided, the photo area is hidden cleanly without layout breakage",
+        "Supports JPEG and PNG image formats",
+        "Unit tests verify base64 encoding of photo and fallback behavior when photo is absent",
+        "Tests pass: python -m pytest tests/test_generator.py -x -v"
+      ],
+      "priority": 11,
+      "passes": true,
+      "notes": "Use base64 encoding to embed photos directly in the HTML. This avoids WeasyPrint file path resolution issues on Windows."
+    },
+    {
+      "id": "US-012",
+      "title": "CLI Wiring and Full Pipeline",
+      "description": "Wire all modules together through the Click CLI entry point, creating the complete pipeline from job input to PDF output.",
+      "acceptanceCriteria": [
+        "src/main.py uses Click to define a CLI with commands: generate (from file/URL), search (from job boards), and version",
+        "generate command accepts --input (file path or URL), --language (en/fr/auto), --output (output path), --photo (optional photo path)",
+        "search command accepts --query, --location, --sites, --num-results and displays results for user selection",
+        "Full pipeline works: input → scrape → analyze → tailor → generate PDF",
+        "Proper error handling with user-friendly messages for missing API key, network errors, file not found",
+        "Unit tests in tests/test_cli.py use Click's CliRunner to test command invocations with mocked pipeline",
+        "Tests pass: python -m pytest tests/test_cli.py -x -v"
+      ],
+      "priority": 12,
+      "passes": true,
+      "notes": "The CLI is the orchestration layer. It should import and call the other modules, not duplicate their logic. Use Click groups for sub-commands."
+    },
+    {
+      "id": "US-013",
+      "title": "End-to-End Integration Test",
+      "description": "Create an end-to-end integration test that exercises the full pipeline from job ad input to PDF generation with all external calls mocked.",
+      "acceptanceCriteria": [
+        "tests/test_integration.py contains a full pipeline test from file input to PDF output",
+        "All external calls are mocked: Claude API returns realistic mock responses, WeasyPrint generates a mock PDF",
+        "Test verifies the entire data flow: scrape → analyze → tailor → generate",
+        "Test validates that the output TailoredCV contains only data from the master CV (no hallucinated content)",
+        "Test runs in both 'en' and 'fr' language modes",
+        "Test is marked with @pytest.mark.integration but runs by default (not skipped)",
+        "Tests pass: python -m pytest tests/test_integration.py -x -v"
+      ],
+      "priority": 13,
+      "passes": true,
+      "notes": "This is a smoke test for the full pipeline. All mocks should return plausible data. The test should catch integration issues between modules."
+    },
+    {
+      "id": "US-014",
+      "title": "README Documentation",
+      "description": "Create comprehensive README documentation with installation instructions, usage examples, architecture overview, and contribution guidelines.",
+      "acceptanceCriteria": [
+        "README.md exists at project root with project title, description, and badges",
+        "Installation section covers: Python 3.11+ requirement, pip install, WeasyPrint system dependencies, Playwright setup, .env configuration",
+        "Usage section shows examples for: generating from file, generating from URL, searching job boards, specifying language and photo",
+        "Architecture section includes a text-based pipeline diagram and module descriptions",
+        "Configuration section documents all environment variables and their purposes",
+        "README is well-formatted Markdown with proper headings, code blocks, and a table of contents"
+      ],
+      "priority": 14,
+      "passes": true,
+      "notes": "This is the last story. By this point all features should be complete. README should accurately reflect the final state of the project."
+    }
+  ]
+}

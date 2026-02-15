@@ -1,0 +1,49 @@
+Senior Software Engineer - TechCorp
+Location: Amsterdam, Netherlands
+Type: Full-time
+Department: Engineering
+
+About the Role
+
+TechCorp is looking for a Senior Software Engineer to join our growing platform team in Amsterdam. You will play a key role in designing, building, and maintaining the backend services and cloud infrastructure that power our data analytics platform, used by over 2 million users worldwide. This is an opportunity to work in a collaborative, fast-paced environment alongside talented engineers who are passionate about delivering high-quality software at scale.
+
+Requirements
+
+- 5+ years of professional software development experience
+- Strong proficiency in Python, with experience building production-grade REST APIs using frameworks such as Django or FastAPI
+- Solid understanding of cloud services on AWS (EC2, S3, Lambda, RDS, SQS)
+- Hands-on experience with Docker for containerization and local development workflows
+- Familiarity with CI/CD pipelines using tools like GitHub Actions, Jenkins, or GitLab CI
+- Experience with front-end development using React and TypeScript
+- Strong knowledge of relational databases such as PostgreSQL or MySQL
+- Proficiency with Git and collaborative development workflows including code reviews and pull requests
+- Excellent problem-solving skills and attention to detail
+- Good communication skills in English; Dutch is a plus
+
+Nice to Have
+
+- Experience with container orchestration using Kubernetes
+- Familiarity with GraphQL APIs and schema design
+- Knowledge of Infrastructure as Code tools such as Terraform or CloudFormation
+- Experience with monitoring and observability tools like Datadog, Prometheus, or Grafana
+- Contributions to open-source projects
+
+Responsibilities
+
+- Design and implement scalable microservices and APIs that handle millions of requests per day
+- Collaborate with product managers, designers, and other engineers to define and deliver new features
+- Write clean, well-tested, and well-documented code following engineering best practices
+- Participate in architecture discussions and technical design reviews
+- Mentor junior developers and contribute to a culture of continuous learning
+- Improve and maintain CI/CD pipelines to ensure fast and reliable deployments
+- Monitor production systems and respond to incidents as part of an on-call rotation
+
+Benefits
+
+- Competitive salary and equity package
+- 30 days of paid vacation
+- Flexible hybrid work model
+- Annual learning and development budget
+- Relocation assistance for international candidates
+
+To apply, send your CV and a brief cover letter to careers@techcorp.example.com.

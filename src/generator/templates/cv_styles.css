@@ -1,0 +1,301 @@
+@page {
+    size: A4;
+    margin: 0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 9pt;
+    line-height: 1.4;
+    color: #2d2d2d;
+}
+
+.cv-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+    width: 30%;
+    background-color: #1e3a5f;
+    color: #ffffff;
+    padding: 25px 18px;
+    min-height: 100vh;
+}
+
+.sidebar .photo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.sidebar .photo-container img {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.sidebar .section-title {
+    font-size: 9pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #8ab4e8;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.sidebar .contact-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    font-size: 8pt;
+    color: #d0dce8;
+    word-break: break-all;
+}
+
+.sidebar .contact-item .icon {
+    width: 14px;
+    margin-right: 6px;
+    flex-shrink: 0;
+    text-align: center;
+    color: #8ab4e8;
+    font-size: 8pt;
+}
+
+/* Skills */
+.sidebar .skill-item {
+    margin-bottom: 6px;
+}
+
+.sidebar .skill-name {
+    font-size: 8pt;
+    color: #d0dce8;
+    margin-bottom: 2px;
+}
+
+.sidebar .skill-bar-bg {
+    width: 100%;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+}
+
+.sidebar .skill-bar-fill {
+    height: 4px;
+    background-color: #8ab4e8;
+    border-radius: 2px;
+}
+
+/* Languages */
+.sidebar .lang-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 8pt;
+    color: #d0dce8;
+}
+
+.sidebar .lang-dots {
+    display: flex;
+    gap: 3px;
+}
+
+.sidebar .lang-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar .lang-dot.filled {
+    background-color: #8ab4e8;
+}
+
+/* Certifications */
+.sidebar .cert-item {
+    margin-bottom: 5px;
+    font-size: 8pt;
+    color: #d0dce8;
+}
+
+.sidebar .cert-name {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.sidebar .cert-detail {
+    font-size: 7pt;
+    color: #a0b8d0;
+}
+
+/* Volunteering in sidebar */
+.sidebar .volunteer-item {
+    margin-bottom: 5px;
+    font-size: 8pt;
+    color: #d0dce8;
+}
+
+.sidebar .volunteer-org {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* ========== MAIN CONTENT ========== */
+.main-content {
+    width: 70%;
+    padding: 25px 22px;
+    background-color: #ffffff;
+}
+
+.main-content .name {
+    font-size: 22pt;
+    font-weight: 700;
+    color: #1e3a5f;
+    margin-bottom: 2px;
+    letter-spacing: 0.5px;
+}
+
+.main-content .title {
+    font-size: 10pt;
+    color: #5a7a9a;
+    font-weight: 400;
+    margin-bottom: 15px;
+}
+
+.main-content .section-title {
+    font-size: 10pt;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #1e3a5f;
+    margin-top: 14px;
+    margin-bottom: 6px;
+    padding-bottom: 3px;
+    border-bottom: 2px solid #1e3a5f;
+}
+
+/* Summary */
+.main-content .summary-text {
+    font-size: 9pt;
+    color: #3d3d3d;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}
+
+/* Experience */
+.experience-entry {
+    margin-bottom: 10px;
+}
+
+.experience-entry .exp-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1px;
+}
+
+.experience-entry .exp-company {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #1e3a5f;
+}
+
+.experience-entry .exp-date {
+    font-size: 8pt;
+    color: #7a7a7a;
+    white-space: nowrap;
+}
+
+.experience-entry .exp-title-location {
+    font-size: 8.5pt;
+    color: #5a5a5a;
+    font-style: italic;
+    margin-bottom: 3px;
+}
+
+.experience-entry .exp-bullets {
+    list-style: none;
+    padding-left: 0;
+}
+
+.experience-entry .exp-bullets li {
+    font-size: 8.5pt;
+    color: #3d3d3d;
+    line-height: 1.4;
+    margin-bottom: 2px;
+    padding-left: 10px;
+    position: relative;
+}
+
+.experience-entry .exp-bullets li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: #1e3a5f;
+    font-size: 8pt;
+}
+
+/* Education */
+.education-entry {
+    margin-bottom: 8px;
+}
+
+.education-entry .edu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.education-entry .edu-institution {
+    font-size: 9.5pt;
+    font-weight: 700;
+    color: #1e3a5f;
+}
+
+.education-entry .edu-date {
+    font-size: 8pt;
+    color: #7a7a7a;
+}
+
+.education-entry .edu-degree {
+    font-size: 8.5pt;
+    color: #3d3d3d;
+    font-style: italic;
+}
+
+.education-entry .edu-details {
+    font-size: 8pt;
+    color: #5a5a5a;
+    margin-top: 2px;
+}
+
+/* Projects */
+.project-entry {
+    margin-bottom: 4px;
+}
+
+.project-entry .proj-name {
+    font-size: 8.5pt;
+    font-weight: 600;
+    color: #1e3a5f;
+    display: inline;
+}
+
+.project-entry .proj-desc {
+    font-size: 8.5pt;
+    color: #3d3d3d;
+    display: inline;
+}

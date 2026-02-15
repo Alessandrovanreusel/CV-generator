@@ -1,0 +1,29 @@
+# CV Generator - Ralph Progress Log
+Started: 2026-02-15
+---
+
+## Iteration 1 — 2026-02-15 (All stories completed in batch)
+
+### Changes Made
+- US-001: Fixed config.py to export Pydantic `Settings` model (was dataclass `Config`).
+- US-002: Created tests/test_models.py with BilingualText, JobRequirements, TailoredCV tests.
+- US-003: Created tests/test_file_scraper.py with PDF/HTML/TXT/unsupported/not-found tests.
+- US-004: Created tests/test_url_scraper.py with static, Playwright fallback, and error tests.
+- US-005: Created tests/test_board_scraper.py with success, empty, and custom site tests.
+- US-006: Created tests/test_language.py with EN, FR, empty, and fallback tests.
+- US-007-008: Already complete. Verified passing.
+- US-009: Created tests/test_strategy.py with scoring, parent exclusion, max limit tests.
+- US-010-011: Already complete. Verified passing.
+- US-012: Created tests/test_cli.py with CliRunner tests. Fixed validate_settings() call.
+- US-013: Created tests/test_integration.py with full EN+FR pipeline tests.
+- US-014: Created README.md with full documentation.
+
+### Lessons Learned
+- lxml must be installed for BeautifulSoup HTML parsing
+- Mock uninstalled packages via patch.dict(sys.modules)
+- CLI lazy imports: mock at source module, not src.main
+- Renamed validate() to validate_settings() to avoid Pydantic v2 conflict
+
+### Final State
+- 75 tests, all passing
+- All 14 user stories: passes=true

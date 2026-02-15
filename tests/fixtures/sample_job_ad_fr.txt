@@ -1,0 +1,49 @@
+Developpeur Full-Stack - InnoTech
+Localisation : Paris, France
+Type de contrat : CDI
+Service : Direction Technique
+
+Description du poste
+
+InnoTech recherche un Developpeur Full-Stack confirme pour rejoindre son equipe produit basee a Paris. Vous participerez a la conception et au developpement de notre plateforme SaaS de gestion de projets collaboratifs, utilisee par plus de 500 entreprises en Europe. Vous travaillerez au sein d'une equipe agile composee de developpeurs, designers et product owners, dans un environnement technique stimulant ou la qualite du code et l'innovation sont au coeur de nos priorites. Nous recherchons une personne autonome, rigoureuse et passionnee par les technologies modernes du web.
+
+Competences requises
+
+- 4 ans d'experience minimum en developpement logiciel
+- Maitrise de Python et d'au moins un framework backend tel que Django, Flask ou FastAPI
+- Experience significative en developpement front-end avec React et TypeScript
+- Bonne connaissance des services cloud AWS (EC2, S3, Lambda, RDS)
+- Experience pratique avec Docker pour la conteneurisation des applications
+- Maitrise des pipelines CI/CD avec des outils comme GitHub Actions, GitLab CI ou Jenkins
+- Solide connaissance des bases de donnees relationnelles, notamment PostgreSQL
+- Pratique courante de Git et des workflows de developpement collaboratif
+- Capacite a rediger de la documentation technique claire et structuree
+- Francais courant et bon niveau d'anglais professionnel
+
+Competences souhaitees
+
+- Experience avec l'orchestration de conteneurs via Kubernetes
+- Connaissance de GraphQL et de la conception de schemas d'API
+- Familiarite avec les outils d'Infrastructure as Code tels que Terraform
+- Experience avec des outils de monitoring comme Datadog, Prometheus ou Grafana
+- Sensibilite aux pratiques de securite applicative (OWASP)
+
+Responsabilites
+
+- Concevoir et developper des fonctionnalites full-stack, du backend jusqu'a l'interface utilisateur
+- Participer aux revues de code et aux discussions techniques sur l'architecture logicielle
+- Ecrire des tests unitaires et d'integration pour garantir la fiabilite du code
+- Collaborer avec les equipes produit et design pour traduire les besoins metier en solutions techniques
+- Contribuer a l'amelioration continue des processus de developpement et de deploiement
+- Assurer la maintenance et l'evolution des services existants en production
+- Participer aux rituels agiles : stand-ups quotidiens, sprint planning et retrospectives
+
+Avantages
+
+- Salaire competitif selon experience
+- Teletravail partiel (3 jours par semaine)
+- Tickets restaurant et mutuelle d'entreprise
+- Budget annuel de formation et conferences
+- Locaux modernes dans le 11e arrondissement de Paris
+
+Pour postuler, envoyez votre CV et une lettre de motivation a recrutement@innotech.example.fr.
