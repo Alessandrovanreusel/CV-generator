@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pydantic import BaseModel, Field
 
 class BilingualText(BaseModel):
@@ -25,6 +27,8 @@ class TailoredExperience(BaseModel):
     summary: str  # Already resolved to the correct language
     bullets: list[str]  # Already resolved to the correct language
     skills_used: list[str] = Field(default_factory=list)
+    is_parent: bool = False
+    sub_experiences: list[TailoredExperience] = Field(default_factory=list)
 
 class TailoredEducation(BaseModel):
     institution: str

@@ -299,11 +299,12 @@ class TestCvTailorBuildsPersonalInfo:
         self, mock_call, sample_master_cv, sample_job_requirements
     ):
         """Mock call_claude and verify PersonalInfo is built correctly."""
-        # Calls: _rewrite_summary, _enhance_experience x2, _reorder_skills
+        # Calls: summary, exp-1 bullets, exp-2 bullets, child-a bullets, skills
         mock_call.side_effect = [
             "Tailored summary for the job.",
             json.dumps(["Enhanced bullet 1", "Enhanced bullet 2", "Enhanced bullet 3"]),
             json.dumps(["Enhanced bullet 1", "Enhanced bullet 2"]),
+            json.dumps(["Enhanced child bullet 1", "Enhanced child bullet 2"]),
             json.dumps({
                 "Programming": ["Python", "TypeScript", "Java"],
                 "Cloud": ["AWS", "Docker", "Terraform"],

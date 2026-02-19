@@ -60,8 +60,8 @@ class CvTailor:
         language: str = "en",
     ) -> TailoredCV:
         """Produce a tailored CV from master data and job requirements."""
-        # Step 1: Select relevant experiences
-        selected_exps = self.strategy.select(
+        # Step 1: Select relevant experiences (grouped by parent)
+        selected_exps = self.strategy.select_grouped(
             master_cv["experience"], requirements
         )
 
@@ -76,8 +76,35 @@ class CvTailor:
         # Step 3: Enhance bullet points via Claude CLI
         tailored_experiences = []
         for exp in selected_exps:
-            enhanced = self._enhance_experience(exp, requirements, language)
-            tailored_experiences.append(enhanced)
+            if exp.get("is_parent"):
+                # Parent: compact header, no bullet enhancement
+                children = exp.get("_selected_children", [])
+                tailored_children = [
+                    self._enhance_experience(c, requirements, language)
+                    for c in children
+                ]
+                parent_entry = TailoredExperience(
+                    id=exp["id"],
+                    company=exp["company"],
+                    title=_resolve_bilingual(exp["title"], language),
+                    location=exp["location"],
+                    start_date=exp["start_date"],
+                    end_date=exp.get("end_date"),
+                    is_current=exp.get("is_current", False),
+                    summary=_resolve_bilingual(
+                        exp.get("summary", ""), language
+                    ),
+                    bullets=[],
+                    skills_used=exp.get("skills_used", []),
+                    is_parent=True,
+                    sub_experiences=tailored_children,
+                )
+                tailored_experiences.append(parent_entry)
+            else:
+                enhanced = self._enhance_experience(
+                    exp, requirements, language
+                )
+                tailored_experiences.append(enhanced)
 
         # Step 4: Reorder skills
         reordered_skills = self._reorder_skills(

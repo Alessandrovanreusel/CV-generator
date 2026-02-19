@@ -97,7 +97,7 @@ class TestTailoredCVModel:
 
     def test_full_tailored_cv(self, sample_tailored_cv):
         assert sample_tailored_cv.personal.name == "Alessandro van Reusel"
-        assert len(sample_tailored_cv.experience) == 2
+        assert len(sample_tailored_cv.experience) == 3
         assert len(sample_tailored_cv.education) == 1
         assert len(sample_tailored_cv.skills) == 3
         assert len(sample_tailored_cv.languages) == 2

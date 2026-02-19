@@ -73,6 +73,7 @@ class TestFullPipelineEnglish:
             "Experienced engineer specializing in Python and AWS.",
             json.dumps(["Enhanced bullet 1", "Enhanced bullet 2", "Enhanced bullet 3"]),
             json.dumps(["Enhanced bullet 1", "Enhanced bullet 2"]),
+            json.dumps(["Enhanced child bullet 1", "Enhanced child bullet 2"]),
             json.dumps({
                 "Programming": ["Python", "TypeScript", "Java"],
                 "Cloud": ["AWS", "Docker", "Terraform"],
@@ -87,7 +88,11 @@ class TestFullPipelineEnglish:
         assert tailored.personal.name == "Alessandro van Reusel"
         assert tailored.target_language == "en"
         assert len(tailored.experience) >= 1
-        assert all(e.id != "exp-parent" for e in tailored.experience)
+        # Parent should appear with is_parent=True and sub_experiences
+        parent_entries = [e for e in tailored.experience if e.is_parent]
+        assert len(parent_entries) == 1
+        assert parent_entries[0].company == "Umbrella Corp"
+        assert len(parent_entries[0].sub_experiences) >= 1
         assert len(tailored.summary) > 10
         assert len(tailored.education) == 1
         assert len(tailored.skills) > 0
@@ -139,6 +144,7 @@ class TestFullPipelineFrench:
             "Ingenieur experimente specialise en Python et AWS.",
             json.dumps(["Bullet ameliore 1", "Bullet ameliore 2", "Bullet ameliore 3"]),
             json.dumps(["Bullet ameliore 1", "Bullet ameliore 2"]),
+            json.dumps(["Bullet enfant ameliore 1", "Bullet enfant ameliore 2"]),
             json.dumps({
                 "Programming": ["Python", "TypeScript", "Java"],
                 "Cloud": ["AWS", "Docker", "Terraform"],

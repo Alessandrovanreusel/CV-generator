@@ -93,18 +93,26 @@ class TestFullPipelineWithFile:
         # Step 4: Tailor the CV (mock Claude CLI for summary and bullets)
         # ------------------------------------------------------------------
         mock_tailor_call.side_effect = [
+            # 1: summary rewrite
             "Seasoned software engineer with 5+ years of experience in Python, "
             "AWS, and scalable microservices development.",
+            # 2: exp-1 bullets
             json.dumps([
                 "Developed high-performance REST APIs using Python and FastAPI",
                 "Architected and deployed AWS cloud infrastructure with Terraform",
                 "Built automated CI/CD pipelines with GitHub Actions",
             ]),
+            # 3: exp-2 bullets
             json.dumps([
                 "Built responsive React front-end components with TypeScript",
                 "Optimized PostgreSQL databases and complex query performance",
             ]),
-            # Skills curation call
+            # 4: exp-child-a bullets (under parent)
+            json.dumps([
+                "Developed internal CLI tools with Python",
+                "Automated reporting pipelines on AWS",
+            ]),
+            # 5: skills curation
             json.dumps({
                 "Programming": ["Python", "TypeScript", "Java"],
                 "Cloud": ["AWS", "Docker", "Kubernetes", "Terraform"],
@@ -132,17 +140,23 @@ class TestFullPipelineWithFile:
         assert "software engineer" in tailored_cv.summary.lower()
         assert len(tailored_cv.summary) > 20
 
-        # Experiences are present (parent entry should be excluded)
+        # Experiences are present
         assert len(tailored_cv.experience) >= 1
         exp_companies = [e.company for e in tailored_cv.experience]
         assert "CloudTech BV" in exp_companies
-        # Parent entry should not appear
-        assert all(e.id != "exp-parent" for e in tailored_cv.experience)
 
-        # Each experience has bullets
+        # Parent entry should appear with is_parent=True and sub_experiences
+        parent_entries = [e for e in tailored_cv.experience if e.is_parent]
+        assert len(parent_entries) == 1
+        assert parent_entries[0].company == "Umbrella Corp"
+        assert len(parent_entries[0].sub_experiences) >= 1
+        assert parent_entries[0].bullets == []  # Parent has no enhanced bullets
+
+        # Each standalone experience has bullets
         for exp in tailored_cv.experience:
-            assert len(exp.bullets) > 0
-            assert exp.title  # title is resolved to string
+            if not exp.is_parent:
+                assert len(exp.bullets) > 0
+            assert exp.title
             assert exp.company
 
         # Education
