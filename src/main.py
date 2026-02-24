@@ -96,10 +96,31 @@ def main(
         sys.exit(1)
 
     # -- Step 6: Generate PDF --
+    import shutil
+
+    company_slug = requirements.company.replace(" ", "_")[:30] or "Unknown"
+    today = date.today().strftime("%Y%m%d")
+
     if output is None:
-        company_slug = requirements.company.replace(" ", "_")[:30] or "Unknown"
-        today = date.today().strftime("%Y%m%d")
-        output = str(config.output_dir / f"CV_Alessandro_van_Reusel_{company_slug}_{today}.pdf")
+        # Create a per-job folder with job ad + PDF together
+        job_folder = config.output_dir / f"{company_slug}_{today}"
+        job_folder.mkdir(parents=True, exist_ok=True)
+
+        # Copy the original job ad into the folder
+        if job_file:
+            src_file = Path(job_file)
+            shutil.copy2(src_file, job_folder / src_file.name)
+        elif job_text:
+            job_ad_path = job_folder / f"{company_slug}_job_ad.txt"
+            job_ad_path.write_text(job_text, encoding="utf-8")
+
+        output = str(job_folder / "CV_Alessandro_van_Reusel.pdf")
+    else:
+        # Custom output path: still create parent folder and copy job ad next to it
+        out_path = Path(output)
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        if job_file:
+            shutil.copy2(Path(job_file), out_path.parent / Path(job_file).name)
 
     click.echo(f"[6/6] Generating PDF -> {output}")
     try:
