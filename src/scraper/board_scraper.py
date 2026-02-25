@@ -6,6 +6,9 @@ class BoardScraper:
 
     DEFAULT_SITES = ["linkedin", "indeed", "glassdoor"]
 
+    def __init__(self, country: str = "Netherlands"):
+        self.country = country
+
     def search(
         self,
         search_term: str,
@@ -31,7 +34,7 @@ class BoardScraper:
             search_term=search_term,
             location=location,
             results_wanted=results_wanted,
-            country_indeed="Netherlands",
+            country_indeed=self.country,
         )
 
         results = []

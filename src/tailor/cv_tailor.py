@@ -20,6 +20,7 @@ from src.tailor.models import (
 )
 from src.tailor.strategies import ExperienceStrategy
 from src.utils.claude_cli import call_claude
+from src.utils.text_utils import strip_markdown_fences
 
 
 def _resolve_bilingual(field: dict | str, language: str) -> str:
@@ -49,8 +50,7 @@ def _resolve_coursework(field: dict | str | None, language: str) -> list[str]:
 class CvTailor:
     """Tailor a master CV to match job requirements using Claude CLI + rules."""
 
-    def __init__(self, model: str | None = None, client=None):
-        # model and client kept for backward compatibility but not used
+    def __init__(self):
         self.strategy = ExperienceStrategy()
 
     def tailor(
@@ -242,11 +242,7 @@ class CvTailor:
 
         raw = call_claude(prompt)
 
-        # Strip markdown fences if present
-        if raw.startswith("```"):
-            raw = raw.split("\n", 1)[1]
-            if raw.endswith("```"):
-                raw = raw.rsplit("```", 1)[0]
+        raw = strip_markdown_fences(raw)
 
         try:
             enhanced_bullets = json.loads(raw)
@@ -285,11 +281,7 @@ class CvTailor:
 
         raw = call_claude(prompt)
 
-        # Strip markdown fences if present
-        if raw.startswith("```"):
-            raw = raw.split("\n", 1)[1]
-            if raw.endswith("```"):
-                raw = raw.rsplit("```", 1)[0]
+        raw = strip_markdown_fences(raw)
 
         try:
             curated = json.loads(raw)

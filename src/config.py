@@ -11,7 +11,7 @@ class Settings(BaseModel):
     log_level: str = os.getenv("LOG_LEVEL", "INFO")
     master_cv_path: Path = Path("data/master_cv.json")
     photo_path: Path = Path("data/photo.jpg")
-    claude_model: str = "claude-sonnet-4-20250514"
+    board_country: str = os.getenv("BOARD_COUNTRY", "Netherlands")
 
     def validate_settings(self) -> None:
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -19,3 +19,12 @@ class Settings(BaseModel):
 
 # Backward compatibility alias
 Config = Settings
+
+# Configure logging at import time
+import logging
+
+_log_level = os.getenv("LOG_LEVEL", "INFO")
+logging.basicConfig(
+    level=getattr(logging, _log_level.upper(), logging.INFO),
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+)

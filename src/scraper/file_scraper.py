@@ -42,13 +42,10 @@ class FileScraper(BaseScraper):
         return "\n".join(pages)
 
     def _extract_html(self) -> str:
-        from bs4 import BeautifulSoup
+        from src.utils.text_utils import extract_html_text
 
         html = self.file_path.read_text(encoding="utf-8")
-        soup = BeautifulSoup(html, "lxml")
-        for tag in soup(["script", "style", "nav", "footer", "header", "aside"]):
-            tag.decompose()
-        return soup.get_text(separator="\n", strip=True)
+        return extract_html_text(html)
 
     def _extract_text(self) -> str:
         return self.file_path.read_text(encoding="utf-8")

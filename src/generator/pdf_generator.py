@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import json
 import os
 import sys
 from pathlib import Path
@@ -64,36 +65,6 @@ LANG_DOTS = {
     "Débutant": 1,
 }
 
-# Skill proficiency levels for bar widths (percentage)
-DEFAULT_SKILL_LEVELS = {
-    "Python": 90,
-    "Java": 85,
-    "C++": 70,
-    "JavaScript": 85,
-    "TypeScript": 80,
-    "Kotlin": 70,
-    "SQL": 80,
-    "Gherkin": 65,
-    "Shell/Bash": 75,
-    "React.js": 85,
-    "Next.js": 75,
-    "React Native": 70,
-    "Angular": 65,
-    "HTML": 85,
-    "CSS": 80,
-    "AWS": 85,
-    "Azure": 80,
-    "Docker": 80,
-    "CI/CD": 85,
-    "Neo4j": 75,
-    "Selenium": 80,
-    "Git": 90,
-    "Agile/Scrum": 85,
-    "Test Automation": 85,
-    "Prompt Engineering": 80,
-    "Knowledge Graphs": 70,
-}
-
 
 class PdfGenerator:
     """Generate a stylish, ATS-friendly PDF CV using Jinja2 + WeasyPrint."""
@@ -136,7 +107,7 @@ class PdfGenerator:
         flat_skills = self._flatten_skills(tailored_cv.skills, max_total=12)
 
         # Build skill levels dict
-        skill_levels = dict(DEFAULT_SKILL_LEVELS)
+        skill_levels = self._load_skill_levels()
 
         # Render HTML
         template = self.env.get_template("cv_template.html")
@@ -178,6 +149,17 @@ class PdfGenerator:
 
         with open(photo_path, "rb") as f:
             return base64.b64encode(f.read()).decode("utf-8")
+
+    def _load_skill_levels(self) -> dict[str, int]:
+        """Load skill levels from JSON file."""
+        skill_levels_path = Path(__file__).parent.parent.parent / "data" / "skill_levels.json"
+        try:
+            with open(skill_levels_path, encoding="utf-8") as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            import logging
+            logging.getLogger(__name__).warning("Could not load skill_levels.json: %s", e)
+            return {}
 
     def _flatten_skills(
         self, skills: dict[str, list[str]], max_total: int = 12

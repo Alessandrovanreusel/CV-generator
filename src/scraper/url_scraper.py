@@ -1,5 +1,4 @@
 import requests
-from bs4 import BeautifulSoup
 
 from .base import BaseScraper
 
@@ -46,7 +45,6 @@ class UrlScraper(BaseScraper):
 
     @staticmethod
     def _extract_text(html: str) -> str:
-        soup = BeautifulSoup(html, "lxml")
-        for tag in soup(["script", "style", "nav", "footer", "header", "aside"]):
-            tag.decompose()
-        return soup.get_text(separator="\n", strip=True)
+        from src.utils.text_utils import extract_html_text
+
+        return extract_html_text(html)
