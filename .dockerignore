@@ -1,0 +1,11 @@
+output/
+.env
+__pycache__/
+.git/
+*.pyc
+.pytest_cache/
+_bmad*/
+docs/
+job-ads/
+n8n/
+.claude/

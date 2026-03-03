@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import shutil
 import sys
+from collections.abc import Callable
 from datetime import date
 from pathlib import Path
 
@@ -17,6 +18,7 @@ class CvPipeline:
 
     def __init__(self, config: Config):
         self.config = config
+        self.last_requirements = None
 
     def run(
         self,
@@ -27,36 +29,52 @@ class CvPipeline:
         language: str | None,
         no_photo: bool,
         output: str | None,
+        progress_callback: Callable[[str, int], None] | None = None,
     ) -> Path:
         """Execute the full pipeline and return the output PDF path."""
+        self.progress_callback = progress_callback
+
         # Step 1: Scrape
         click.echo("[1/6] Scraping job ad...")
+        if self.progress_callback:
+            self.progress_callback("Scraping job ad", 1)
         job_text = self._scrape(job_url, job_file, search, location)
 
         if not job_text or len(job_text.strip()) < 50:
             raise RuntimeError("Could not extract enough text from the job ad.")
 
         # Step 2: Detect language
+        if self.progress_callback:
+            self.progress_callback("Detecting language", 2)
         language = self._detect_language(job_text, language)
 
         # Step 3: Analyze
         click.echo("[3/6] Analyzing job requirements...")
+        if self.progress_callback:
+            self.progress_callback("Analyzing job requirements", 3)
         self.config.validate_settings()
         requirements = self._analyze(job_text)
+        self.last_requirements = requirements
         click.echo(f"   -> {requirements.title} at {requirements.company}")
         click.echo(f"   -> {len(requirements.required_skills)} required skills, {len(requirements.keywords)} keywords")
 
         # Step 4: Load master CV
         click.echo("[4/6] Loading master CV...")
+        if self.progress_callback:
+            self.progress_callback("Loading master CV", 4)
         master_cv = self._load_cv()
 
         # Step 5: Tailor
         click.echo("[5/6] Tailoring CV to match job requirements...")
+        if self.progress_callback:
+            self.progress_callback("Tailoring CV", 5)
         tailored_cv = self._tailor(master_cv, requirements, language)
 
         # Step 6: Prepare output and generate PDF
         output_path = self._prepare_output(requirements, job_url, job_file, job_text, output)
         click.echo(f"[6/6] Generating PDF -> {output_path}")
+        if self.progress_callback:
+            self.progress_callback("Generating PDF", 6)
         result_path = self._generate(tailored_cv, output_path, no_photo)
         click.echo(f"Done! CV generated: {result_path}")
         return result_path

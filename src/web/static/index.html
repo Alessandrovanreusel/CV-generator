@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>CV Generator</h1>
+      <p class="tagline">Paste a job ad, upload a file, enter a URL, or search — get a tailored CV in seconds.</p>
+    </header>
+
+    <main>
+      <!-- Tab bar -->
+      <div class="tabs" id="tabs">
+        <button class="tab active" data-tab="text">Paste Text</button>
+        <button class="tab" data-tab="file">Upload File</button>
+        <button class="tab" data-tab="url">Enter URL</button>
+        <button class="tab" data-tab="search">Search Jobs</button>
+      </div>
+
+      <!-- Tab panels -->
+      <form id="job-form">
+        <div class="panel active" id="panel-text">
+          <textarea id="input-text" name="text" rows="10" placeholder="Paste the job ad text here..."></textarea>
+        </div>
+
+        <div class="panel" id="panel-file">
+          <div class="file-drop" id="file-drop">
+            <p>Drag &amp; drop a file here, or click to browse</p>
+            <p class="hint">Accepts PDF, HTML, TXT</p>
+            <input type="file" id="input-file" name="file" accept=".pdf,.html,.htm,.txt">
+          </div>
+          <p class="file-name" id="file-name"></p>
+        </div>
+
+        <div class="panel" id="panel-url">
+          <input type="url" id="input-url" name="url" placeholder="https://...">
+        </div>
+
+        <div class="panel" id="panel-search">
+          <input type="text" id="input-search" name="search" placeholder="e.g. Data Engineer">
+          <input type="text" id="input-location" name="location" value="Amsterdam" placeholder="Location">
+        </div>
+
+        <button type="submit" id="submit-btn">Generate CV</button>
+      </form>
+
+      <!-- Progress stepper -->
+      <div class="progress-section hidden" id="progress-section">
+        <h2>Generating your CV...</h2>
+        <div class="stepper">
+          <div class="step" data-step="1"><span class="circle">1</span><span class="label">Scraping</span></div>
+          <div class="step" data-step="2"><span class="circle">2</span><span class="label">Detecting Language</span></div>
+          <div class="step" data-step="3"><span class="circle">3</span><span class="label">Analyzing</span></div>
+          <div class="step" data-step="4"><span class="circle">4</span><span class="label">Loading CV</span></div>
+          <div class="step" data-step="5"><span class="circle">5</span><span class="label">Tailoring</span></div>
+          <div class="step" data-step="6"><span class="circle">6</span><span class="label">Generating PDF</span></div>
+        </div>
+      </div>
+
+      <!-- Result -->
+      <div class="result-section hidden" id="result-section">
+        <div class="success-card">
+          <h2>CV Ready!</h2>
+          <p><strong id="result-title"></strong> at <strong id="result-company"></strong></p>
+          <a id="download-btn" class="btn-download" href="#">Download CV</a>
+          <button type="button" id="reset-btn" class="btn-reset">Generate another?</button>
+        </div>
+      </div>
+
+      <!-- Error -->
+      <div class="error-section hidden" id="error-section">
+        <div class="error-card">
+          <h2>Something went wrong</h2>
+          <p id="error-message"></p>
+          <button type="button" id="error-reset-btn" class="btn-reset">Try again</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
